@@ -16,7 +16,7 @@ type HistoryEntry = {
 
 const TIME_LIMIT = 30;
 const SITE_URL = "https://tsukkome.vercel.app/";
-const HASHTAG = "ツッコミ練習";
+const HASHTAG = "ツッコメッ";
 
 const pickRandomBoke = (exclude?: number): Boke => {
   if (bokes.length === 1) return bokes[0];
@@ -205,24 +205,30 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>ツッコミ練習</h1>
-        <p className="subtitle">お題のボケに、思いついたツッコミをどうぞ</p>
+        <div className="title-row">
+          <span className="title-mark left">▼</span>
+          <h1 className="title">ツッコメッ<span className="title-bang">！！</span></h1>
+          <span className="title-mark right">▼</span>
+        </div>
+        <p className="subtitle">ボケのお題に、ノリと勢いでツッコめ！</p>
       </header>
 
       <section className="boke-card">
         <div className="boke-meta">
-          <span className="badge">お題 #{currentBoke.id}</span>
+          <span className="badge">ボケ #{currentBoke.id}</span>
           <span className={`timer ${timeLeft <= 5 && timerRunning ? "timer-warn" : ""}`}>
             {tts.isSpeaking
-              ? "読み上げ中…"
+              ? "🔊 読み上げ中…"
               : timerRunning
-                ? `残り ${timeLeft}秒`
+                ? `⏱ 残り ${timeLeft}秒`
                 : timeLeft === 0
-                  ? "時間切れ"
+                  ? "💥 時間切れ！"
                   : "準備中"}
           </span>
         </div>
-        <p className="boke-setup">{currentBoke.setup}</p>
+        <div className="boke-bubble">
+          <p className="boke-setup">{currentBoke.setup}</p>
+        </div>
         {tts.supported && (
           <div className="boke-tts">
             <button
@@ -311,7 +317,7 @@ function App() {
             onClick={submit}
             disabled={!currentInput.trim()}
           >
-            ツッコむ！
+            💥 ツッコめッ！
           </button>
           <button type="button" className="secondary" onClick={nextBoke}>
             次のお題 →
@@ -377,7 +383,7 @@ function App() {
 
       {history.length > 0 && (
         <section className="history">
-          <h2>練習履歴</h2>
+          <h2>🎤 ツッコミ履歴</h2>
           <ul>
             {history.map((entry, i) => (
               <li key={`${entry.timestamp}-${i}`} className="history-item">

@@ -1,11 +1,11 @@
 :root {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", system-ui,
+    -apple-system, "Segoe UI", "Noto Sans JP", sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  color-scheme: light dark;
-  color: #fff;
-  background: #0e1018;
+  color-scheme: light;
+  color: #1a1a1a;
+  background: #fff5d6;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,19 +19,19 @@
 body {
   margin: 0;
   min-height: 100svh;
-  background: #0e1018;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 24px,
+      rgba(255, 61, 127, 0.04) 24px,
+      rgba(255, 61, 127, 0.04) 48px
+    ),
+    radial-gradient(circle at 20% 10%, rgba(255, 61, 127, 0.12), transparent 50%),
+    radial-gradient(circle at 80% 90%, rgba(255, 220, 0, 0.18), transparent 50%),
+    #fff5d6;
 }
 
 #root {
   min-height: 100svh;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #111;
-    background: #f4f5fb;
-  }
-  body {
-    background: #f4f5fb;
-  }
 }
