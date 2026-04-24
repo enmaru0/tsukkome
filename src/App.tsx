@@ -15,6 +15,8 @@ type HistoryEntry = {
 };
 
 const TIME_LIMIT = 30;
+const SITE_URL = "https://tsukkome.vercel.app/";
+const HASHTAG = "ツッコミ練習";
 
 const pickRandomBoke = (exclude?: number): Boke => {
   if (bokes.length === 1) return bokes[0];
@@ -23,6 +25,45 @@ const pickRandomBoke = (exclude?: number): Boke => {
     next = bokes[Math.floor(Math.random() * bokes.length)];
   }
   return next;
+};
+
+const buildShareText = (setup: string, tsukkomi: string): string =>
+  `【お題】${setup}\n【ツッコミ】「${tsukkomi}」\n\n#${HASHTAG}`;
+
+const openTwitterIntent = (setup: string, tsukkomi: string) => {
+  const text = buildShareText(setup, tsukkomi);
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+};
+
+const nativeShare = async (
+  setup: string,
+  tsukkomi: string,
+): Promise<boolean> => {
+  if (typeof navigator === "undefined" || !navigator.share) return false;
+  try {
+    await navigator.share({
+      title: "ツッコミ練習",
+      text: buildShareText(setup, tsukkomi),
+      url: SITE_URL,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const copyToClipboard = async (
+  setup: string,
+  tsukkomi: string,
+): Promise<boolean> => {
+  const text = `${buildShareText(setup, tsukkomi)}\n${SITE_URL}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 function App() {
@@ -34,7 +75,14 @@ function App() {
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [timerRunning, setTimerRunning] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
+  const [lastSubmission, setLastSubmission] = useState<{
+    setup: string;
+    tsukkomi: string;
+  } | null>(null);
+  const [copyToast, setCopyToast] = useState<string | null>(null);
   const intervalRef = useRef<number | null>(null);
+  const canNativeShare =
+    typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const speech = useSpeechRecognition();
   const tts = useSpeechSynthesis();
@@ -74,6 +122,12 @@ function App() {
     };
   }, [timerRunning]);
 
+  useEffect(() => {
+    if (!copyToast) return;
+    const id = window.setTimeout(() => setCopyToast(null), 2000);
+    return () => window.clearTimeout(id);
+  }, [copyToast]);
+
   const voiceText = useMemo(
     () => (speech.transcript + " " + speech.interim).trim(),
     [speech.transcript, speech.interim],
@@ -94,6 +148,7 @@ function App() {
       },
       ...prev,
     ]);
+    setLastSubmission({ setup: currentBoke.setup, tsukkomi: value });
     setShowExamples(true);
     setTimerRunning(false);
     if (mode === "voice" && speech.isListening) {
@@ -107,6 +162,7 @@ function App() {
     setText("");
     speech.reset();
     setShowExamples(false);
+    setLastSubmission(null);
     setTimerRunning(false);
   };
 
@@ -132,6 +188,18 @@ function App() {
       speech.stop();
     }
     setMode(next);
+  };
+
+  const handleNativeShare = async (setup: string, tsukkomi: string) => {
+    const ok = await nativeShare(setup, tsukkomi);
+    if (!ok) {
+      setCopyToast("シェアをキャンセルしました");
+    }
+  };
+
+  const handleCopy = async (setup: string, tsukkomi: string) => {
+    const ok = await copyToClipboard(setup, tsukkomi);
+    setCopyToast(ok ? "コピーしました！" : "コピーに失敗しました");
   };
 
   return (
@@ -250,6 +318,51 @@ function App() {
           </button>
         </div>
 
+        {lastSubmission && (
+          <div className="share-panel">
+            <h3>このツッコミをシェア</h3>
+            <div className="share-preview">
+              <div className="share-line">
+                <span className="share-label">お題</span>
+                {lastSubmission.setup}
+              </div>
+              <div className="share-line">
+                <span className="share-label">ツッコミ</span>
+                「{lastSubmission.tsukkomi}」
+              </div>
+            </div>
+            <div className="share-buttons">
+              <button
+                type="button"
+                className="share-button x"
+                onClick={() =>
+                  openTwitterIntent(lastSubmission.setup, lastSubmission.tsukkomi)
+                }
+              >
+                𝕏 でシェア
+              </button>
+              {canNativeShare && (
+                <button
+                  type="button"
+                  className="share-button native"
+                  onClick={() =>
+                    handleNativeShare(lastSubmission.setup, lastSubmission.tsukkomi)
+                  }
+                >
+                  📤 シェア
+                </button>
+              )}
+              <button
+                type="button"
+                className="share-button copy"
+                onClick={() => handleCopy(lastSubmission.setup, lastSubmission.tsukkomi)}
+              >
+                📋 コピー
+              </button>
+            </div>
+          </div>
+        )}
+
         {showExamples && (
           <div className="examples">
             <h3>模範ツッコミ例</h3>
@@ -268,18 +381,31 @@ function App() {
           <ul>
             {history.map((entry, i) => (
               <li key={`${entry.timestamp}-${i}`} className="history-item">
-                <div className="history-setup">
-                  <span className="history-mode">
-                    {entry.mode === "text" ? "⌨" : "🎤"}
-                  </span>
-                  {entry.setup}
+                <div className="history-content">
+                  <div className="history-setup">
+                    <span className="history-mode">
+                      {entry.mode === "text" ? "⌨" : "🎤"}
+                    </span>
+                    {entry.setup}
+                  </div>
+                  <div className="history-tsukkomi">→ {entry.tsukkomi}</div>
                 </div>
-                <div className="history-tsukkomi">→ {entry.tsukkomi}</div>
+                <button
+                  type="button"
+                  className="history-share"
+                  onClick={() => openTwitterIntent(entry.setup, entry.tsukkomi)}
+                  title="𝕏 でシェア"
+                  aria-label="𝕏 でシェア"
+                >
+                  𝕏
+                </button>
               </li>
             ))}
           </ul>
         </section>
       )}
+
+      {copyToast && <div className="toast">{copyToast}</div>}
     </div>
   );
 }
