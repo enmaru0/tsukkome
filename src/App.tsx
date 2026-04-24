@@ -6,6 +6,27 @@ import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
 
 type InputMode = "text" | "voice";
+type TsukkomiMode = "normal" | "tatoe";
+
+const TSUKKOMI_MODE_KEY = "tsukkome:tsukkomiMode";
+
+const loadTsukkomiMode = (): TsukkomiMode => {
+  if (typeof window === "undefined") return "normal";
+  try {
+    const v = window.localStorage.getItem(TSUKKOMI_MODE_KEY);
+    return v === "tatoe" ? "tatoe" : "normal";
+  } catch {
+    return "normal";
+  }
+};
+
+const saveTsukkomiMode = (m: TsukkomiMode) => {
+  try {
+    window.localStorage.setItem(TSUKKOMI_MODE_KEY, m);
+  } catch {
+    // ignore
+  }
+};
 
 type HistoryEntry = {
   bokeId: number;
@@ -93,6 +114,12 @@ const downloadAudio = (url: string, mimeType: string, timestamp: number) => {
 function App() {
   const [currentBoke, setCurrentBoke] = useState<Boke>(() => pickRandomBoke());
   const [mode, setMode] = useState<InputMode>("voice");
+  const [tsukkomiMode, setTsukkomiModeState] = useState<TsukkomiMode>(loadTsukkomiMode);
+
+  const setTsukkomiMode = (m: TsukkomiMode) => {
+    setTsukkomiModeState(m);
+    saveTsukkomiMode(m);
+  };
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -273,6 +300,38 @@ function App() {
         <p className="subtitle">ボケのお題に、ノリと勢いでツッコめ！</p>
       </header>
 
+      <section className="tsukkomi-mode-selector">
+        <div className="tsukkomi-mode-tabs">
+          <button
+            type="button"
+            className={
+              tsukkomiMode === "normal"
+                ? "tsukkomi-mode-tab active"
+                : "tsukkomi-mode-tab"
+            }
+            onClick={() => setTsukkomiMode("normal")}
+          >
+            💥 通常ツッコミ
+          </button>
+          <button
+            type="button"
+            className={
+              tsukkomiMode === "tatoe"
+                ? "tsukkomi-mode-tab active"
+                : "tsukkomi-mode-tab"
+            }
+            onClick={() => setTsukkomiMode("tatoe")}
+          >
+            ✨ たとえツッコミ
+          </button>
+        </div>
+        <p className="tsukkomi-mode-hint">
+          {tsukkomiMode === "tatoe"
+            ? "「〇〇か！」「〇〇かお前は！」で意外なものに例えてツッコめ"
+            : "「〇〇やないか！」「〇〇すぎやろ！」の定番パターンでツッコめ"}
+        </p>
+      </section>
+
       <section className="boke-card">
         <div className="boke-meta">
           <span className="badge">ボケ #{currentBoke.id}</span>
@@ -291,49 +350,21 @@ function App() {
         </div>
         {tts.supported && (
           <div className="boke-tts">
-            <div className="boke-tts-row">
-              <button
-                type="button"
-                className="speak-button"
-                onClick={replaySetup}
-              >
-                {tts.isSpeaking ? "■ 停止" : "🔊 もう一度読み上げ"}
-              </button>
-              <label className="auto-speak">
-                <input
-                  type="checkbox"
-                  checked={autoSpeak}
-                  onChange={(e) => setAutoSpeak(e.target.checked)}
-                />
-                新しいお題を自動で読み上げる
-              </label>
-            </div>
-            {tts.voices.length > 0 && (
-              <div className="boke-tts-row">
-                <label className="voice-select-label">声:</label>
-                <select
-                  className="voice-select"
-                  value={tts.selectedVoice?.voiceURI ?? ""}
-                  onChange={(e) => tts.selectVoice(e.target.value)}
-                >
-                  {tts.voices.map((v) => (
-                    <option key={v.voiceURI} value={v.voiceURI}>
-                      {v.name}
-                      {v.localService ? "（オフライン）" : "（オンライン）"}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  className="speak-button"
-                  onClick={previewVoice}
-                  disabled={tts.isSpeaking}
-                  title="この声で試し聴き"
-                >
-                  🔉 試し聴き
-                </button>
-              </div>
-            )}
+            <button
+              type="button"
+              className="speak-button"
+              onClick={replaySetup}
+            >
+              {tts.isSpeaking ? "■ 停止" : "🔊 もう一度読み上げ"}
+            </button>
+            <label className="auto-speak">
+              <input
+                type="checkbox"
+                checked={autoSpeak}
+                onChange={(e) => setAutoSpeak(e.target.checked)}
+              />
+              新しいお題を自動で読み上げる
+            </label>
           </div>
         )}
       </section>
@@ -361,7 +392,11 @@ function App() {
         {mode === "text" ? (
           <textarea
             className="text-input"
-            placeholder="ここにツッコミを入力（例：「いるわけないやろ！」）"
+            placeholder={
+              tsukkomiMode === "tatoe"
+                ? "ここにたとえツッコミを入力（例：「サーカス団の新人か！」）"
+                : "ここにツッコミを入力（例：「いるわけないやろ！」）"
+            }
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => {
@@ -496,9 +531,16 @@ function App() {
 
         {showExamples && (
           <div className="examples">
-            <h3>模範ツッコミ例</h3>
+            <h3>
+              {tsukkomiMode === "tatoe"
+                ? "模範たとえツッコミ例"
+                : "模範ツッコミ例"}
+            </h3>
             <ul>
-              {currentBoke.examples.map((ex, i) => (
+              {(tsukkomiMode === "tatoe"
+                ? currentBoke.examplesTatoe
+                : currentBoke.examples
+              ).map((ex, i) => (
                 <li key={i}>{ex}</li>
               ))}
             </ul>
@@ -557,6 +599,36 @@ function App() {
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {tts.supported && tts.voices.length > 0 && (
+        <section className="settings">
+          <h2>⚙ 設定</h2>
+          <div className="settings-row">
+            <label className="voice-select-label">読み上げの声</label>
+            <select
+              className="voice-select"
+              value={tts.selectedVoice?.voiceURI ?? ""}
+              onChange={(e) => tts.selectVoice(e.target.value)}
+            >
+              {tts.voices.map((v) => (
+                <option key={v.voiceURI} value={v.voiceURI}>
+                  {v.name}
+                  {v.localService ? "（オフライン）" : "（オンライン）"}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              className="speak-button"
+              onClick={previewVoice}
+              disabled={tts.isSpeaking}
+              title="この声で試し聴き"
+            >
+              🔉 試し聴き
+            </button>
+          </div>
         </section>
       )}
 

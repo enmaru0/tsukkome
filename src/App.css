@@ -153,31 +153,94 @@
 
 .boke-tts {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 2px dashed #1a1a1a;
-}
-
-.boke-tts-row {
-  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 2px dashed #1a1a1a;
+  flex-wrap: wrap;
+}
+
+/* ======== Tsukkomi mode selector ======== */
+
+.tsukkomi-mode-selector {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.tsukkomi-mode-tabs {
+  display: inline-flex;
+  gap: 0;
+  background: #fff;
+  border: 3px solid #1a1a1a;
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 4px 4px 0 #1a1a1a;
+}
+
+.tsukkomi-mode-tab {
+  background: transparent;
+  color: #1a1a1a;
+  border: none;
+  padding: 8px 22px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.tsukkomi-mode-tab:hover:not(.active) {
+  background: #fff5d6;
+}
+
+.tsukkomi-mode-tab.active {
+  background: #ff3d7f;
+  color: #fff;
+}
+
+.tsukkomi-mode-hint {
+  margin: 12px 0 0;
+  font-size: 0.82rem;
+  color: #5a4a3a;
+  font-weight: 600;
+}
+
+/* ======== Settings (bottom) ======== */
+
+.settings {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 2px dashed #1a1a1a;
+}
+
+.settings h2 {
+  font-size: 1rem;
+  color: #5a4a3a;
+  margin: 0 0 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .voice-select-label {
   font-size: 0.85rem;
-  font-weight: 800;
-  color: #1a1a1a;
+  font-weight: 700;
+  color: #5a4a3a;
   flex-shrink: 0;
 }
 
 .voice-select {
   flex: 1;
-  min-width: 0;
+  min-width: 150px;
   background: #fff;
   color: #1a1a1a;
   border: 2.5px solid #1a1a1a;
