@@ -226,6 +226,11 @@ function App() {
     }
   };
 
+  const previewVoice = () => {
+    tts.cancel();
+    tts.speak("ちょっと待て待て、何やそれ！");
+  };
+
   const switchMode = async (next: InputMode) => {
     if (mode === next) return;
     if (next === "text") {
@@ -286,21 +291,49 @@ function App() {
         </div>
         {tts.supported && (
           <div className="boke-tts">
-            <button
-              type="button"
-              className="speak-button"
-              onClick={replaySetup}
-            >
-              {tts.isSpeaking ? "■ 停止" : "🔊 もう一度読み上げ"}
-            </button>
-            <label className="auto-speak">
-              <input
-                type="checkbox"
-                checked={autoSpeak}
-                onChange={(e) => setAutoSpeak(e.target.checked)}
-              />
-              新しいお題を自動で読み上げる
-            </label>
+            <div className="boke-tts-row">
+              <button
+                type="button"
+                className="speak-button"
+                onClick={replaySetup}
+              >
+                {tts.isSpeaking ? "■ 停止" : "🔊 もう一度読み上げ"}
+              </button>
+              <label className="auto-speak">
+                <input
+                  type="checkbox"
+                  checked={autoSpeak}
+                  onChange={(e) => setAutoSpeak(e.target.checked)}
+                />
+                新しいお題を自動で読み上げる
+              </label>
+            </div>
+            {tts.voices.length > 0 && (
+              <div className="boke-tts-row">
+                <label className="voice-select-label">声:</label>
+                <select
+                  className="voice-select"
+                  value={tts.selectedVoice?.voiceURI ?? ""}
+                  onChange={(e) => tts.selectVoice(e.target.value)}
+                >
+                  {tts.voices.map((v) => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name}
+                      {v.localService ? "（オフライン）" : "（オンライン）"}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="speak-button"
+                  onClick={previewVoice}
+                  disabled={tts.isSpeaking}
+                  title="この声で試し聴き"
+                >
+                  🔉 試し聴き
+                </button>
+              </div>
+            )}
           </div>
         )}
       </section>
