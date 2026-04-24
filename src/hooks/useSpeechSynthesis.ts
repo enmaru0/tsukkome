@@ -31,7 +31,7 @@ export const useSpeechSynthesis = () => {
   }, [supported]);
 
   const speak = useCallback(
-    (text: string, onEnd?: () => void) => {
+    (text: string, onEnd?: () => void, onStart?: () => void) => {
       if (!supported || !text) {
         onEnd?.();
         return;
@@ -39,10 +39,13 @@ export const useSpeechSynthesis = () => {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "ja-JP";
-      utterance.rate = 1.0;
+      utterance.rate = 1.4;
       utterance.pitch = 1.0;
       if (voice) utterance.voice = voice;
-      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+        onStart?.();
+      };
       utterance.onend = () => {
         setIsSpeaking(false);
         onEnd?.();

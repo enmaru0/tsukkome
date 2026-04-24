@@ -128,19 +128,25 @@ function App() {
   };
 
   useEffect(() => {
-    if (autoSpeak && tts.supported) {
-      tts.speak(currentBoke.setup, () => {
-        startTimer();
-        if (modeRef.current === "voice") {
-          void beginVoiceCapture();
-        }
-      });
-    } else {
-      startTimer();
-      if (modeRef.current === "voice") {
-        void beginVoiceCapture();
+    const run = async () => {
+      if (modeRef.current === "voice" && recorder.supported) {
+        await recorder.start();
       }
-    }
+      if (autoSpeak && tts.supported) {
+        tts.speak(currentBoke.setup, () => {
+          startTimer();
+          if (modeRef.current === "voice" && speech.supported) {
+            speech.start();
+          }
+        });
+      } else {
+        startTimer();
+        if (modeRef.current === "voice" && speech.supported) {
+          speech.start();
+        }
+      }
+    };
+    void run();
     return () => {
       tts.cancel();
     };
