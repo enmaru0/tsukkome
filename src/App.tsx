@@ -19,7 +19,7 @@ type HistoryEntry = {
 
 const TIME_LIMIT = 30;
 const SITE_URL = "https://tsukkome.vercel.app/";
-const HASHTAG = "ツッコメッ";
+const HASHTAG = "ツッコめッ";
 
 const pickRandomBoke = (exclude?: number): Boke => {
   if (bokes.length === 1) return bokes[0];
@@ -46,7 +46,7 @@ const nativeShare = async (
   if (typeof navigator === "undefined" || !navigator.share) return false;
   try {
     await navigator.share({
-      title: "ツッコメッ！！",
+      title: "ツッコめッ！！",
       text: buildShareText(setup, tsukkomi),
       url: SITE_URL,
     });
@@ -117,14 +117,6 @@ function App() {
   const startTimer = () => {
     setTimeLeft(TIME_LIMIT);
     setTimerRunning(true);
-  };
-
-  const beginVoiceCapture = async () => {
-    if (!speech.supported) return;
-    if (recorder.supported) {
-      await recorder.start();
-    }
-    speech.start();
   };
 
   useEffect(() => {
@@ -234,22 +226,21 @@ function App() {
     }
   };
 
-  const toggleVoice = async () => {
-    if (speech.isListening || recorder.isRecording) {
-      if (speech.isListening) speech.stop();
-      await recorder.stop();
-    } else {
-      await beginVoiceCapture();
-    }
-  };
-
-  const switchMode = (next: InputMode) => {
+  const switchMode = async (next: InputMode) => {
     if (mode === next) return;
     if (next === "text") {
       if (speech.isListening) speech.stop();
       recorder.cancel();
+      setMode(next);
+      return;
     }
     setMode(next);
+    if (recorder.supported && !recorder.isRecording) {
+      await recorder.start();
+    }
+    if (!tts.isSpeaking && speech.supported && !speech.isListening) {
+      speech.start();
+    }
   };
 
   const handleNativeShare = async (entry: HistoryEntry) => {
@@ -271,7 +262,7 @@ function App() {
       <header className="header">
         <div className="title-row">
           <span className="title-mark left">▼</span>
-          <h1 className="title">ツッコメッ<span className="title-bang">！！</span></h1>
+          <h1 className="title">ツッコめッ<span className="title-bang">！！</span></h1>
           <span className="title-mark right">▼</span>
         </div>
         <p className="subtitle">ボケのお題に、ノリと勢いでツッコめ！</p>
@@ -356,23 +347,28 @@ function App() {
               </p>
             ) : (
               <>
-                <button
-                  type="button"
-                  className={isMicActive ? "mic-button listening" : "mic-button"}
-                  onClick={() => void toggleVoice()}
+                <div
+                  className={
+                    isMicActive
+                      ? "voice-transcript active"
+                      : "voice-transcript"
+                  }
                 >
-                  {isMicActive
-                    ? "● 録音中（タップで停止）"
-                    : "🎤 マイクをオン"}
-                </button>
-                <div className="voice-transcript">
-                  {voiceText || (
-                    <span className="placeholder">
-                      {isMicActive
-                        ? "聴いてます…ツッコんでください"
-                        : "マイクをオンにして、声でツッコんでください"}
+                  {isMicActive && (
+                    <span className="recording-indicator">
+                      <span className="recording-dot" />
+                      録音中
                     </span>
                   )}
+                  <div className="voice-transcript-text">
+                    {voiceText || (
+                      <span className="placeholder">
+                        {isMicActive
+                          ? "聴いてます…ツッコんでください"
+                          : "「💥 ツッコめッ！」を押すと送信、「次のお題」で新しいボケへ"}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 {(speech.error || recorder.error) && (
                   <p className="voice-error">

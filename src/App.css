@@ -282,50 +282,71 @@
 .voice-area {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  align-items: center;
-  padding: 12px 0;
-}
-
-.mic-button {
-  background: #ff3d7f;
-  color: #fff;
-  border: 3px solid #1a1a1a;
-  border-radius: 999px;
-  padding: 14px 32px;
-  font-size: 1rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.1s;
-  box-shadow: 4px 4px 0 #1a1a1a;
-}
-
-.mic-button:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 #1a1a1a;
-}
-
-.mic-button.listening {
-  background: #ff0033;
-  animation: pulse-mic 0.8s ease-in-out infinite alternate;
-}
-
-@keyframes pulse-mic {
-  from { box-shadow: 4px 4px 0 #1a1a1a, 0 0 0 0 rgba(255, 0, 51, 0.5); }
-  to { box-shadow: 4px 4px 0 #1a1a1a, 0 0 0 18px rgba(255, 0, 51, 0); }
+  gap: 12px;
 }
 
 .voice-transcript {
   width: 100%;
-  min-height: 60px;
+  min-height: 90px;
   background: #fffbef;
   border: 3px dashed #1a1a1a;
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   font-size: 1.05rem;
   color: #1a1a1a;
   font-weight: 600;
   box-sizing: border-box;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.voice-transcript.active {
+  border-style: solid;
+  border-color: #ff0033;
+  background: #fff5f7;
+  box-shadow:
+    0 0 0 0 rgba(255, 0, 51, 0.5),
+    inset 0 0 0 0 transparent;
+  animation: transcript-pulse 1.4s ease-out infinite;
+}
+
+@keyframes transcript-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.45); }
+  100% { box-shadow: 0 0 0 14px rgba(255, 0, 51, 0); }
+}
+
+.recording-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ff0033;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  border: 2px solid #1a1a1a;
+}
+
+.recording-dot {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: dot-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes dot-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.voice-transcript-text {
+  line-height: 1.6;
+  word-break: break-word;
 }
 
 .placeholder {
