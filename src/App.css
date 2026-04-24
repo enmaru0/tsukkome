@@ -162,52 +162,6 @@
   flex-wrap: wrap;
 }
 
-/* ======== Tsukkomi mode selector ======== */
-
-.tsukkomi-mode-selector {
-  margin-bottom: 28px;
-  text-align: center;
-}
-
-.tsukkomi-mode-tabs {
-  display: inline-flex;
-  gap: 0;
-  background: #fff;
-  border: 3px solid #1a1a1a;
-  border-radius: 999px;
-  padding: 4px;
-  box-shadow: 4px 4px 0 #1a1a1a;
-}
-
-.tsukkomi-mode-tab {
-  background: transparent;
-  color: #1a1a1a;
-  border: none;
-  padding: 8px 22px;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
-}
-
-.tsukkomi-mode-tab:hover:not(.active) {
-  background: #fff5d6;
-}
-
-.tsukkomi-mode-tab.active {
-  background: #ff3d7f;
-  color: #fff;
-}
-
-.tsukkomi-mode-hint {
-  margin: 12px 0 0;
-  font-size: 0.82rem;
-  color: #5a4a3a;
-  font-weight: 600;
-}
-
 /* ======== Settings (bottom) ======== */
 
 .settings {
@@ -535,14 +489,24 @@
 
 .examples {
   margin-top: 22px;
-  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.examples-block {
+  padding: 14px 18px;
   background: #ffd400;
   border: 3px solid #1a1a1a;
   border-radius: 12px;
   box-shadow: 4px 4px 0 #1a1a1a;
 }
 
-.examples h3 {
+.examples-block.tatoe {
+  background: #b6e9ff;
+}
+
+.examples-block h3 {
   margin: 0 0 8px;
   font-size: 0.95rem;
   color: #1a1a1a;
@@ -550,13 +514,13 @@
   letter-spacing: 0.05em;
 }
 
-.examples ul {
+.examples-block ul {
   margin: 0;
   padding-left: 22px;
   color: #1a1a1a;
 }
 
-.examples li {
+.examples-block li {
   margin-bottom: 4px;
   line-height: 1.6;
   font-weight: 600;
