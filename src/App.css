@@ -539,6 +539,74 @@
   color: #1a1a1a;
 }
 
+/* ======== Audio playback ======== */
+
+.audio-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.audio-player {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  border-radius: 999px;
+  background: #fffbef;
+  border: 2.5px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #1a1a1a;
+}
+
+.audio-player::-webkit-media-controls-panel {
+  background: #fffbef;
+}
+
+.audio-download {
+  background: #ffd400;
+  color: #1a1a1a;
+  border: 2.5px solid #1a1a1a;
+  border-radius: 8px;
+  width: 44px;
+  height: 40px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.1s;
+  box-shadow: 3px 3px 0 #1a1a1a;
+}
+
+.audio-download:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #1a1a1a;
+}
+
+.audio-download:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #1a1a1a;
+}
+
+.audio-download.small {
+  width: 36px;
+  height: 32px;
+  font-size: 0.9rem;
+  box-shadow: 2px 2px 0 #1a1a1a;
+}
+
+.audio-download.small:hover {
+  box-shadow: 3px 3px 0 #1a1a1a;
+}
+
+.history-item .audio-row {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.history-item .audio-player {
+  height: 32px;
+}
+
 /* ======== Toast ======== */
 
 .toast {

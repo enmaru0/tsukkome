@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { bokes, type Boke } from "./data/bokes";
+import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
 
@@ -11,6 +12,8 @@ type HistoryEntry = {
   setup: string;
   tsukkomi: string;
   mode: InputMode;
+  audioUrl: string | null;
+  audioMime: string | null;
   timestamp: number;
 };
 
@@ -43,7 +46,7 @@ const nativeShare = async (
   if (typeof navigator === "undefined" || !navigator.share) return false;
   try {
     await navigator.share({
-      title: "ツッコミ練習",
+      title: "ツッコメッ！！",
       text: buildShareText(setup, tsukkomi),
       url: SITE_URL,
     });
@@ -66,37 +69,77 @@ const copyToClipboard = async (
   }
 };
 
+const downloadAudio = (url: string, mimeType: string, timestamp: number) => {
+  const ext = mimeType.includes("mp4")
+    ? "m4a"
+    : mimeType.includes("ogg")
+      ? "ogg"
+      : "webm";
+  const date = new Date(timestamp);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mi = String(date.getMinutes()).padStart(2, "0");
+  const ss = String(date.getSeconds()).padStart(2, "0");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `tsukkome_${yyyy}${mm}${dd}_${hh}${mi}${ss}.${ext}`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
 function App() {
   const [currentBoke, setCurrentBoke] = useState<Boke>(() => pickRandomBoke());
-  const [mode, setMode] = useState<InputMode>("text");
+  const [mode, setMode] = useState<InputMode>("voice");
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [timerRunning, setTimerRunning] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
-  const [lastSubmission, setLastSubmission] = useState<{
-    setup: string;
-    tsukkomi: string;
-  } | null>(null);
+  const [lastSubmission, setLastSubmission] = useState<HistoryEntry | null>(null);
   const [copyToast, setCopyToast] = useState<string | null>(null);
   const intervalRef = useRef<number | null>(null);
+  const modeRef = useRef<InputMode>("voice");
   const canNativeShare =
     typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const speech = useSpeechRecognition();
   const tts = useSpeechSynthesis();
+  const recorder = useAudioRecorder();
+
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
 
   const startTimer = () => {
     setTimeLeft(TIME_LIMIT);
     setTimerRunning(true);
   };
 
+  const beginVoiceCapture = async () => {
+    if (!speech.supported) return;
+    if (recorder.supported) {
+      await recorder.start();
+    }
+    speech.start();
+  };
+
   useEffect(() => {
     if (autoSpeak && tts.supported) {
-      tts.speak(currentBoke.setup, () => startTimer());
+      tts.speak(currentBoke.setup, () => {
+        startTimer();
+        if (modeRef.current === "voice") {
+          void beginVoiceCapture();
+        }
+      });
     } else {
       startTimer();
+      if (modeRef.current === "voice") {
+        void beginVoiceCapture();
+      }
     }
     return () => {
       tts.cancel();
@@ -135,29 +178,40 @@ function App() {
 
   const currentInput = mode === "text" ? text : voiceText;
 
-  const submit = () => {
+  const submit = async () => {
     const value = currentInput.trim();
     if (!value) return;
-    setHistory((prev) => [
-      {
-        bokeId: currentBoke.id,
-        setup: currentBoke.setup,
-        tsukkomi: value,
-        mode,
-        timestamp: Date.now(),
-      },
-      ...prev,
-    ]);
-    setLastSubmission({ setup: currentBoke.setup, tsukkomi: value });
+
+    let audioUrl: string | null = null;
+    let audioMime: string | null = null;
+    if (mode === "voice") {
+      if (speech.isListening) speech.stop();
+      const result = await recorder.stop();
+      if (result) {
+        audioUrl = result.url;
+        audioMime = result.mimeType;
+      }
+    }
+
+    const entry: HistoryEntry = {
+      bokeId: currentBoke.id,
+      setup: currentBoke.setup,
+      tsukkomi: value,
+      mode,
+      audioUrl,
+      audioMime,
+      timestamp: Date.now(),
+    };
+    setHistory((prev) => [entry, ...prev]);
+    setLastSubmission(entry);
     setShowExamples(true);
     setTimerRunning(false);
-    if (mode === "voice" && speech.isListening) {
-      speech.stop();
-    }
   };
 
   const nextBoke = () => {
     tts.cancel();
+    if (speech.isListening) speech.stop();
+    recorder.cancel();
     setCurrentBoke((prev) => pickRandomBoke(prev.id));
     setText("");
     speech.reset();
@@ -174,33 +228,37 @@ function App() {
     }
   };
 
-  const toggleVoice = () => {
-    if (speech.isListening) {
-      speech.stop();
+  const toggleVoice = async () => {
+    if (speech.isListening || recorder.isRecording) {
+      if (speech.isListening) speech.stop();
+      await recorder.stop();
     } else {
-      speech.start();
+      await beginVoiceCapture();
     }
   };
 
   const switchMode = (next: InputMode) => {
     if (mode === next) return;
-    if (next === "text" && speech.isListening) {
-      speech.stop();
+    if (next === "text") {
+      if (speech.isListening) speech.stop();
+      recorder.cancel();
     }
     setMode(next);
   };
 
-  const handleNativeShare = async (setup: string, tsukkomi: string) => {
-    const ok = await nativeShare(setup, tsukkomi);
+  const handleNativeShare = async (entry: HistoryEntry) => {
+    const ok = await nativeShare(entry.setup, entry.tsukkomi);
     if (!ok) {
       setCopyToast("シェアをキャンセルしました");
     }
   };
 
-  const handleCopy = async (setup: string, tsukkomi: string) => {
-    const ok = await copyToClipboard(setup, tsukkomi);
+  const handleCopy = async (entry: HistoryEntry) => {
+    const ok = await copyToClipboard(entry.setup, entry.tsukkomi);
     setCopyToast(ok ? "コピーしました！" : "コピーに失敗しました");
   };
+
+  const isMicActive = speech.isListening || recorder.isRecording;
 
   return (
     <div className="app">
@@ -254,19 +312,19 @@ function App() {
         <div className="mode-tabs">
           <button
             type="button"
-            className={mode === "text" ? "tab active" : "tab"}
-            onClick={() => switchMode("text")}
-          >
-            ⌨ テキスト入力
-          </button>
-          <button
-            type="button"
             className={mode === "voice" ? "tab active" : "tab"}
             onClick={() => switchMode("voice")}
             disabled={!speech.supported}
             title={speech.supported ? "" : "このブラウザは音声入力に対応していません"}
           >
             🎤 音声入力
+          </button>
+          <button
+            type="button"
+            className={mode === "text" ? "tab active" : "tab"}
+            onClick={() => switchMode("text")}
+          >
+            ⌨ テキスト入力
           </button>
         </div>
 
@@ -279,7 +337,7 @@ function App() {
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault();
-                submit();
+                void submit();
               }
             }}
             rows={3}
@@ -294,17 +352,27 @@ function App() {
               <>
                 <button
                   type="button"
-                  className={speech.isListening ? "mic-button listening" : "mic-button"}
-                  onClick={toggleVoice}
+                  className={isMicActive ? "mic-button listening" : "mic-button"}
+                  onClick={() => void toggleVoice()}
                 >
-                  {speech.isListening ? "● 録音中（タップで停止）" : "🎤 マイクをオン"}
+                  {isMicActive
+                    ? "● 録音中（タップで停止）"
+                    : "🎤 マイクをオン"}
                 </button>
                 <div className="voice-transcript">
                   {voiceText || (
-                    <span className="placeholder">マイクをオンにして、声でツッコんでください</span>
+                    <span className="placeholder">
+                      {isMicActive
+                        ? "聴いてます…ツッコんでください"
+                        : "マイクをオンにして、声でツッコんでください"}
+                    </span>
                   )}
                 </div>
-                {speech.error && <p className="voice-error">エラー: {speech.error}</p>}
+                {(speech.error || recorder.error) && (
+                  <p className="voice-error">
+                    エラー: {speech.error || recorder.error}
+                  </p>
+                )}
               </>
             )}
           </div>
@@ -314,7 +382,7 @@ function App() {
           <button
             type="button"
             className="primary"
-            onClick={submit}
+            onClick={() => void submit()}
             disabled={!currentInput.trim()}
           >
             💥 ツッコめッ！
@@ -337,6 +405,30 @@ function App() {
                 「{lastSubmission.tsukkomi}」
               </div>
             </div>
+            {lastSubmission.audioUrl && (
+              <div className="audio-row">
+                <audio
+                  controls
+                  src={lastSubmission.audioUrl}
+                  className="audio-player"
+                />
+                <button
+                  type="button"
+                  className="audio-download"
+                  onClick={() =>
+                    downloadAudio(
+                      lastSubmission.audioUrl!,
+                      lastSubmission.audioMime || "audio/webm",
+                      lastSubmission.timestamp,
+                    )
+                  }
+                  title="録音をダウンロード"
+                  aria-label="録音をダウンロード"
+                >
+                  ⬇
+                </button>
+              </div>
+            )}
             <div className="share-buttons">
               <button
                 type="button"
@@ -351,9 +443,7 @@ function App() {
                 <button
                   type="button"
                   className="share-button native"
-                  onClick={() =>
-                    handleNativeShare(lastSubmission.setup, lastSubmission.tsukkomi)
-                  }
+                  onClick={() => handleNativeShare(lastSubmission)}
                 >
                   📤 シェア
                 </button>
@@ -361,7 +451,7 @@ function App() {
               <button
                 type="button"
                 className="share-button copy"
-                onClick={() => handleCopy(lastSubmission.setup, lastSubmission.tsukkomi)}
+                onClick={() => handleCopy(lastSubmission)}
               >
                 📋 コピー
               </button>
@@ -395,6 +485,30 @@ function App() {
                     {entry.setup}
                   </div>
                   <div className="history-tsukkomi">→ {entry.tsukkomi}</div>
+                  {entry.audioUrl && (
+                    <div className="audio-row">
+                      <audio
+                        controls
+                        src={entry.audioUrl}
+                        className="audio-player"
+                      />
+                      <button
+                        type="button"
+                        className="audio-download small"
+                        onClick={() =>
+                          downloadAudio(
+                            entry.audioUrl!,
+                            entry.audioMime || "audio/webm",
+                            entry.timestamp,
+                          )
+                        }
+                        title="録音をダウンロード"
+                        aria-label="録音をダウンロード"
+                      >
+                        ⬇
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <button
                   type="button"
