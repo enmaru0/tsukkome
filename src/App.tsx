@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import { bokes, type Boke } from "./data/bokes";
+import { bokes, type AnyBoke } from "./data/bokes";
+import { imageBokes } from "./data/imageBokes";
 import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
 
 type InputMode = "text" | "voice";
+type Phase = "start" | "text" | "image";
 
 type HistoryEntry = {
-  bokeId: number;
-  setup: string;
+  boke: AnyBoke;
   tsukkomi: string;
   mode: InputMode;
   audioUrl: string | null;
@@ -21,33 +22,41 @@ const TIME_LIMIT = 30;
 const SITE_URL = "https://tsukkome.vercel.app/";
 const HASHTAG = "ツッコめッ";
 
-const pickRandomBoke = (exclude?: number): Boke => {
-  if (bokes.length === 1) return bokes[0];
-  let next = bokes[Math.floor(Math.random() * bokes.length)];
-  while (exclude !== undefined && next.id === exclude) {
-    next = bokes[Math.floor(Math.random() * bokes.length)];
+const pickRandom = <T extends { id: number }>(list: T[], excludeId?: number): T => {
+  if (list.length === 1) return list[0];
+  let next = list[Math.floor(Math.random() * list.length)];
+  while (excludeId !== undefined && next.id === excludeId) {
+    next = list[Math.floor(Math.random() * list.length)];
   }
   return next;
 };
 
-const buildShareText = (setup: string, tsukkomi: string): string =>
-  `【お題】${setup}\n【ツッコミ】「${tsukkomi}」\n\n#${HASHTAG}`;
+const bokeToSetupText = (boke: AnyBoke): string =>
+  boke.kind === "text" ? boke.setup : boke.title;
 
-const openTwitterIntent = (setup: string, tsukkomi: string) => {
-  const text = buildShareText(setup, tsukkomi);
+const bokeToShareSetup = (boke: AnyBoke): string =>
+  boke.kind === "text" ? boke.setup : `${boke.emoji} ${boke.title}`;
+
+const buildShareText = (boke: AnyBoke, tsukkomi: string): string => {
+  const label = boke.kind === "image" ? "画像お題" : "お題";
+  return `【${label}】${bokeToShareSetup(boke)}\n【ツッコミ】「${tsukkomi}」\n\n#${HASHTAG}`;
+};
+
+const openTwitterIntent = (boke: AnyBoke, tsukkomi: string) => {
+  const text = buildShareText(boke, tsukkomi);
   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}`;
   window.open(url, "_blank", "noopener,noreferrer");
 };
 
 const nativeShare = async (
-  setup: string,
+  boke: AnyBoke,
   tsukkomi: string,
 ): Promise<boolean> => {
   if (typeof navigator === "undefined" || !navigator.share) return false;
   try {
     await navigator.share({
       title: "ツッコめッ！！",
-      text: buildShareText(setup, tsukkomi),
+      text: buildShareText(boke, tsukkomi),
       url: SITE_URL,
     });
     return true;
@@ -57,10 +66,10 @@ const nativeShare = async (
 };
 
 const copyToClipboard = async (
-  setup: string,
+  boke: AnyBoke,
   tsukkomi: string,
 ): Promise<boolean> => {
-  const text = `${buildShareText(setup, tsukkomi)}\n${SITE_URL}`;
+  const text = `${buildShareText(boke, tsukkomi)}\n${SITE_URL}`;
   try {
     await navigator.clipboard.writeText(text);
     return true;
@@ -91,7 +100,10 @@ const downloadAudio = (url: string, mimeType: string, timestamp: number) => {
 };
 
 function App() {
-  const [currentBoke, setCurrentBoke] = useState<Boke>(() => pickRandomBoke());
+  const [phase, setPhase] = useState<Phase>("start");
+  const [currentBoke, setCurrentBoke] = useState<AnyBoke>(() =>
+    pickRandom(bokes),
+  );
   const [mode, setMode] = useState<InputMode>("voice");
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
@@ -119,13 +131,17 @@ function App() {
     setTimerRunning(true);
   };
 
+  const bokeKey = `${currentBoke.kind}:${currentBoke.id}`;
+
   useEffect(() => {
+    if (phase === "start") return;
     const run = async () => {
       if (modeRef.current === "voice" && recorder.supported) {
         await recorder.start();
       }
+      const speakText = bokeToSetupText(currentBoke);
       if (autoSpeak && tts.supported) {
-        tts.speak(currentBoke.setup, () => {
+        tts.speak(speakText, () => {
           startTimer();
           if (modeRef.current === "voice" && speech.supported) {
             speech.start();
@@ -143,7 +159,7 @@ function App() {
       tts.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentBoke.id]);
+  }, [phase, bokeKey]);
 
   useEffect(() => {
     if (!timerRunning) return;
@@ -176,6 +192,29 @@ function App() {
 
   const currentInput = mode === "text" ? text : voiceText;
 
+  const startMode = (next: "text" | "image") => {
+    const initialBoke =
+      next === "text" ? pickRandom(bokes) : pickRandom(imageBokes);
+    setCurrentBoke(initialBoke);
+    setShowExamples(false);
+    setLastSubmission(null);
+    setText("");
+    speech.reset();
+    setTimerRunning(false);
+    setPhase(next);
+  };
+
+  const goToStart = () => {
+    tts.cancel();
+    if (speech.isListening) speech.stop();
+    recorder.cancel();
+    setPhase("start");
+    setShowExamples(false);
+    setLastSubmission(null);
+    setTimerRunning(false);
+    setTimeLeft(TIME_LIMIT);
+  };
+
   const submit = async () => {
     const value = currentInput.trim();
     if (!value) return;
@@ -192,8 +231,7 @@ function App() {
     }
 
     const entry: HistoryEntry = {
-      bokeId: currentBoke.id,
-      setup: currentBoke.setup,
+      boke: currentBoke,
       tsukkomi: value,
       mode,
       audioUrl,
@@ -210,7 +248,11 @@ function App() {
     tts.cancel();
     if (speech.isListening) speech.stop();
     recorder.cancel();
-    setCurrentBoke((prev) => pickRandomBoke(prev.id));
+    setCurrentBoke((prev) =>
+      phase === "image"
+        ? pickRandom(imageBokes, prev.id)
+        : pickRandom(bokes, prev.id),
+    );
     setText("");
     speech.reset();
     setShowExamples(false);
@@ -222,7 +264,7 @@ function App() {
     if (tts.isSpeaking) {
       tts.cancel();
     } else {
-      tts.speak(currentBoke.setup);
+      tts.speak(bokeToSetupText(currentBoke));
     }
   };
 
@@ -249,66 +291,158 @@ function App() {
   };
 
   const handleNativeShare = async (entry: HistoryEntry) => {
-    const ok = await nativeShare(entry.setup, entry.tsukkomi);
+    const ok = await nativeShare(entry.boke, entry.tsukkomi);
     if (!ok) {
       setCopyToast("シェアをキャンセルしました");
     }
   };
 
   const handleCopy = async (entry: HistoryEntry) => {
-    const ok = await copyToClipboard(entry.setup, entry.tsukkomi);
+    const ok = await copyToClipboard(entry.boke, entry.tsukkomi);
     setCopyToast(ok ? "コピーしました！" : "コピーに失敗しました");
   };
 
   const isMicActive = speech.isListening || recorder.isRecording;
 
+  if (phase === "start") {
+    return (
+      <div className="app">
+        <header className="header start">
+          <div className="title-row">
+            <span className="title-mark left">▼</span>
+            <h1 className="title">ツッコめッ<span className="title-bang">！！</span></h1>
+            <span className="title-mark right">▼</span>
+          </div>
+          <p className="subtitle">ボケのお題に、ノリと勢いでツッコめ！</p>
+        </header>
+
+        <section className="start-screen">
+          <p className="start-lead">モードを選んでスタート！</p>
+          <div className="start-buttons">
+            <button
+              type="button"
+              className="start-button text-mode"
+              onClick={() => startMode("text")}
+            >
+              <div className="start-button-emoji">💬</div>
+              <div className="start-button-title">通常モード</div>
+              <div className="start-button-desc">文字のお題にツッコむ</div>
+            </button>
+            <button
+              type="button"
+              className="start-button image-mode"
+              onClick={() => startMode("image")}
+            >
+              <div className="start-button-emoji">📷</div>
+              <div className="start-button-title">画像モード</div>
+              <div className="start-button-desc">絵のお題にツッコむ</div>
+            </button>
+          </div>
+          <p className="start-note">
+            初回はマイクの許可ダイアログが出ます。「許可」を押してください。
+          </p>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
+      <div className="topbar">
+        <button type="button" className="back-button" onClick={goToStart}>
+          ← モードを変える
+        </button>
+      </div>
+
       <header className="header">
         <div className="title-row">
           <span className="title-mark left">▼</span>
           <h1 className="title">ツッコめッ<span className="title-bang">！！</span></h1>
           <span className="title-mark right">▼</span>
         </div>
-        <p className="subtitle">ボケのお題に、ノリと勢いでツッコめ！</p>
+        <p className="subtitle">
+          {phase === "image"
+            ? "📷 画像モード — この絵を見てツッコめ！"
+            : "💬 通常モード — このボケにツッコめ！"}
+        </p>
       </header>
 
-      <section className="boke-card">
-        <div className="boke-meta">
-          <span className="badge">ボケ #{currentBoke.id}</span>
-          <span className={`timer ${timeLeft <= 5 && timerRunning ? "timer-warn" : ""}`}>
-            {tts.isSpeaking
-              ? "🔊 読み上げ中…"
-              : timerRunning
-                ? `⏱ 残り ${timeLeft}秒`
-                : timeLeft === 0
-                  ? "💥 時間切れ！"
-                  : "準備中"}
-          </span>
-        </div>
-        <div className="boke-bubble">
-          <p className="boke-setup">{currentBoke.setup}</p>
-        </div>
-        {tts.supported && (
-          <div className="boke-tts">
-            <button
-              type="button"
-              className="speak-button"
-              onClick={replaySetup}
-            >
-              {tts.isSpeaking ? "■ 停止" : "🔊 もう一度読み上げ"}
-            </button>
-            <label className="auto-speak">
-              <input
-                type="checkbox"
-                checked={autoSpeak}
-                onChange={(e) => setAutoSpeak(e.target.checked)}
-              />
-              新しいお題を自動で読み上げる
-            </label>
+      {currentBoke.kind === "text" ? (
+        <section className="boke-card">
+          <div className="boke-meta">
+            <span className="badge">ボケ #{currentBoke.id}</span>
+            <span className={`timer ${timeLeft <= 5 && timerRunning ? "timer-warn" : ""}`}>
+              {tts.isSpeaking
+                ? "🔊 読み上げ中…"
+                : timerRunning
+                  ? `⏱ 残り ${timeLeft}秒`
+                  : timeLeft === 0
+                    ? "💥 時間切れ！"
+                    : "準備中"}
+            </span>
           </div>
-        )}
-      </section>
+          <div className="boke-bubble">
+            <p className="boke-setup">{currentBoke.setup}</p>
+          </div>
+          {tts.supported && (
+            <div className="boke-tts">
+              <button
+                type="button"
+                className="speak-button"
+                onClick={replaySetup}
+              >
+                {tts.isSpeaking ? "■ 停止" : "🔊 もう一度読み上げ"}
+              </button>
+              <label className="auto-speak">
+                <input
+                  type="checkbox"
+                  checked={autoSpeak}
+                  onChange={(e) => setAutoSpeak(e.target.checked)}
+                />
+                新しいお題を自動で読み上げる
+              </label>
+            </div>
+          )}
+        </section>
+      ) : (
+        <section className="image-boke-card">
+          <div className="boke-meta">
+            <span className="badge">画像 #{currentBoke.id}</span>
+            <span className={`timer ${timeLeft <= 5 && timerRunning ? "timer-warn" : ""}`}>
+              {tts.isSpeaking
+                ? "🔊 読み上げ中…"
+                : timerRunning
+                  ? `⏱ 残り ${timeLeft}秒`
+                  : timeLeft === 0
+                    ? "💥 時間切れ！"
+                    : "準備中"}
+            </span>
+          </div>
+          <div className="image-frame">
+            <div className="image-emoji">{currentBoke.emoji}</div>
+          </div>
+          <p className="image-title">{currentBoke.title}</p>
+          {tts.supported && (
+            <div className="boke-tts">
+              <button
+                type="button"
+                className="speak-button"
+                onClick={replaySetup}
+              >
+                {tts.isSpeaking ? "■ 停止" : "🔊 タイトル読み上げ"}
+              </button>
+              <label className="auto-speak">
+                <input
+                  type="checkbox"
+                  checked={autoSpeak}
+                  onChange={(e) => setAutoSpeak(e.target.checked)}
+                />
+                自動でタイトル読み上げ
+              </label>
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="input-area">
         <div className="mode-tabs">
@@ -404,8 +538,10 @@ function App() {
             <h3>このツッコミをシェア</h3>
             <div className="share-preview">
               <div className="share-line">
-                <span className="share-label">お題</span>
-                {lastSubmission.setup}
+                <span className="share-label">
+                  {lastSubmission.boke.kind === "image" ? "画像" : "お題"}
+                </span>
+                {bokeToShareSetup(lastSubmission.boke)}
               </div>
               <div className="share-line">
                 <span className="share-label">ツッコミ</span>
@@ -441,7 +577,7 @@ function App() {
                 type="button"
                 className="share-button x"
                 onClick={() =>
-                  openTwitterIntent(lastSubmission.setup, lastSubmission.tsukkomi)
+                  openTwitterIntent(lastSubmission.boke, lastSubmission.tsukkomi)
                 }
               >
                 𝕏 でシェア
@@ -499,7 +635,16 @@ function App() {
                     <span className="history-mode">
                       {entry.mode === "text" ? "⌨" : "🎤"}
                     </span>
-                    {entry.setup}
+                    {entry.boke.kind === "image" ? (
+                      <>
+                        <span className="history-image-emoji">
+                          {entry.boke.emoji}
+                        </span>
+                        {entry.boke.title}
+                      </>
+                    ) : (
+                      entry.boke.setup
+                    )}
                   </div>
                   <div className="history-tsukkomi">→ {entry.tsukkomi}</div>
                   {entry.audioUrl && (
@@ -530,7 +675,7 @@ function App() {
                 <button
                   type="button"
                   className="history-share"
-                  onClick={() => openTwitterIntent(entry.setup, entry.tsukkomi)}
+                  onClick={() => openTwitterIntent(entry.boke, entry.tsukkomi)}
                   title="𝕏 でシェア"
                   aria-label="𝕏 でシェア"
                 >
