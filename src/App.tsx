@@ -5,6 +5,7 @@ import { imageBokes } from "./data/imageBokes";
 import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
+import { generateVideo, isVideoSupported } from "./utils/generateVideo";
 
 type InputMode = "text" | "voice";
 type Phase = "start" | "text" | "image";
@@ -113,10 +114,13 @@ function App() {
   const [autoSpeak, setAutoSpeak] = useState(true);
   const [lastSubmission, setLastSubmission] = useState<HistoryEntry | null>(null);
   const [copyToast, setCopyToast] = useState<string | null>(null);
+  const [videoBusy, setVideoBusy] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
   const intervalRef = useRef<number | null>(null);
   const modeRef = useRef<InputMode>("voice");
   const canNativeShare =
     typeof navigator !== "undefined" && typeof navigator.share === "function";
+  const canMakeVideo = isVideoSupported();
 
   const speech = useSpeechRecognition();
   const tts = useSpeechSynthesis();
@@ -300,6 +304,42 @@ function App() {
   const handleCopy = async (entry: HistoryEntry) => {
     const ok = await copyToClipboard(entry.boke, entry.tsukkomi);
     setCopyToast(ok ? "コピーしました！" : "コピーに失敗しました");
+  };
+
+  const handleVideoTweet = async (entry: HistoryEntry) => {
+    if (!entry.audioUrl || videoBusy) return;
+    setVideoBusy(true);
+    setVideoProgress(0);
+    try {
+      const result = await generateVideo({
+        audioUrl: entry.audioUrl,
+        boke: entry.boke,
+        tsukkomi: entry.tsukkomi,
+        onProgress: (p) => setVideoProgress(p),
+      });
+      const url = URL.createObjectURL(result.blob);
+      const date = new Date(entry.timestamp);
+      const ts = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}_${String(date.getHours()).padStart(2, "0")}${String(date.getMinutes()).padStart(2, "0")}${String(date.getSeconds()).padStart(2, "0")}`;
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `tsukkome_${ts}.${result.ext}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      window.setTimeout(() => {
+        openTwitterIntent(entry.boke, entry.tsukkomi);
+        setCopyToast("動画ダウンロード完了！ツイート画面で添付してください");
+      }, 400);
+    } catch (e) {
+      console.error("[video]", e);
+      setCopyToast(
+        e instanceof Error ? `動画生成失敗: ${e.message}` : "動画生成に失敗しました",
+      );
+    } finally {
+      setVideoBusy(false);
+      setVideoProgress(0);
+    }
   };
 
   const isMicActive = speech.isListening || recorder.isRecording;
@@ -599,6 +639,24 @@ function App() {
                 📋 コピー
               </button>
             </div>
+            {lastSubmission.audioUrl && canMakeVideo && (
+              <button
+                type="button"
+                className="share-button video"
+                onClick={() => void handleVideoTweet(lastSubmission)}
+                disabled={videoBusy}
+              >
+                {videoBusy
+                  ? `🎬 動画作成中… ${Math.round(videoProgress * 100)}%`
+                  : "🎬 動画にしてツイート（音声付き）"}
+              </button>
+            )}
+            {lastSubmission.audioUrl && canMakeVideo && (
+              <p className="video-help">
+                生成された動画を、開いたツイート画面に
+                <strong>ドラッグ＆ドロップで添付</strong>してください。
+              </p>
+            )}
           </div>
         )}
 

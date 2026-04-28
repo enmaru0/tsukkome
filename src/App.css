@@ -787,6 +787,33 @@
   color: #1a1a1a;
 }
 
+.share-button.video {
+  flex: 1 0 100%;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #ff3d7f 0%, #ffd400 100%);
+  color: #1a1a1a;
+}
+
+.share-button.video:disabled {
+  background: #ddd;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 2px 2px 0 #888;
+}
+
+.video-help {
+  margin: 10px 0 0;
+  font-size: 0.78rem;
+  color: #5a4a3a;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.video-help strong {
+  color: #ff3d7f;
+}
+
 /* ======== Audio playback ======== */
 
 .audio-row {
