@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body {
+        width: 512px;
+        height: 512px;
+        font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", -apple-system, sans-serif;
+        background:
+          radial-gradient(circle at 30% 25%, rgba(255, 220, 0, 0.55), transparent 55%),
+          radial-gradient(circle at 75% 80%, rgba(255, 61, 127, 0.6), transparent 55%),
+          #1a1a1a;
+        color: #fff;
+        overflow: hidden;
+      }
+      .frame {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .stripes {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent 0,
+          transparent 24px,
+          rgba(255, 255, 255, 0.04) 24px,
+          rgba(255, 255, 255, 0.04) 48px
+        );
+      }
+      .text {
+        position: relative;
+        font-size: 96px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+        text-align: center;
+        transform: rotate(-3deg);
+        text-shadow:
+          4px 4px 0 #ffd400,
+          8px 8px 0 #ff3d7f;
+        padding: 16px;
+      }
+      .row1 { color: #fff; }
+      .row2 {
+        display: block;
+        margin-top: 6px;
+      }
+      .bang {
+        color: #ff3d7f;
+        text-shadow:
+          5px 5px 0 #1a1a1a,
+          10px 10px 0 #ffd400;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="stripes"></div>
+      <div class="text">
+        <span class="row1">ツッ</span>
+        <span class="row2">コめ<span class="bang">ッ</span></span>
+      </div>
+    </div>
+  </body>
+</html>

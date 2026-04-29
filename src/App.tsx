@@ -5,10 +5,23 @@ import { imageBokes } from "./data/imageBokes";
 import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
+import type { InputMode } from "./types";
+import {
+  completeDaily,
+  getDailyBoke,
+  loadDaily,
+  refreshStreak,
+  type DailyRecord,
+  type StreakData,
+} from "./utils/daily";
 import { generateVideo, isVideoSupported } from "./utils/generateVideo";
+import {
+  loadAllEntries,
+  saveEntry,
+  type StoredEntry,
+} from "./utils/storage";
 
-type InputMode = "text" | "voice";
-type Phase = "start" | "text" | "image";
+type Phase = "start" | "text" | "image" | "daily";
 
 type HistoryEntry = {
   boke: AnyBoke;
@@ -16,6 +29,7 @@ type HistoryEntry = {
   mode: InputMode;
   audioUrl: string | null;
   audioMime: string | null;
+  audioBlob: Blob | null;
   timestamp: number;
 };
 
@@ -105,6 +119,9 @@ function App() {
   const [currentBoke, setCurrentBoke] = useState<AnyBoke>(() =>
     pickRandom(bokes),
   );
+  const [daily, setDaily] = useState<DailyRecord>(() => loadDaily());
+  const [streak, setStreak] = useState<StreakData>(() => refreshStreak());
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const [mode, setMode] = useState<InputMode>("voice");
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
@@ -129,6 +146,27 @@ function App() {
   useEffect(() => {
     modeRef.current = mode;
   }, [mode]);
+
+  useEffect(() => {
+    let alive = true;
+    loadAllEntries().then((stored: StoredEntry[]) => {
+      if (!alive) return;
+      const entries: HistoryEntry[] = stored.map((s) => ({
+        boke: s.boke,
+        tsukkomi: s.tsukkomi,
+        mode: s.mode,
+        audioBlob: s.audioBlob,
+        audioMime: s.audioMime,
+        audioUrl: s.audioBlob ? URL.createObjectURL(s.audioBlob) : null,
+        timestamp: s.timestamp,
+      }));
+      setHistory(entries);
+      setHistoryLoaded(true);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const startTimer = () => {
     setTimeLeft(TIME_LIMIT);
@@ -196,9 +234,13 @@ function App() {
 
   const currentInput = mode === "text" ? text : voiceText;
 
-  const startMode = (next: "text" | "image") => {
+  const startMode = (next: "text" | "image" | "daily") => {
     const initialBoke =
-      next === "text" ? pickRandom(bokes) : pickRandom(imageBokes);
+      next === "text"
+        ? pickRandom(bokes)
+        : next === "image"
+          ? pickRandom(imageBokes)
+          : getDailyBoke();
     setCurrentBoke(initialBoke);
     setShowExamples(false);
     setLastSubmission(null);
@@ -225,33 +267,57 @@ function App() {
 
     let audioUrl: string | null = null;
     let audioMime: string | null = null;
+    let audioBlob: Blob | null = null;
     if (mode === "voice") {
       if (speech.isListening) speech.stop();
       const result = await recorder.stop();
       if (result) {
         audioUrl = result.url;
         audioMime = result.mimeType;
+        audioBlob = result.blob;
       }
     }
 
+    const timestamp = Date.now();
     const entry: HistoryEntry = {
       boke: currentBoke,
       tsukkomi: value,
       mode,
       audioUrl,
       audioMime,
-      timestamp: Date.now(),
+      audioBlob,
+      timestamp,
     };
     setHistory((prev) => [entry, ...prev]);
     setLastSubmission(entry);
     setShowExamples(true);
     setTimerRunning(false);
+
+    void saveEntry({
+      timestamp,
+      boke: currentBoke,
+      tsukkomi: value,
+      mode,
+      audioBlob,
+      audioMime,
+    });
+
+    if (phase === "daily") {
+      const result = completeDaily(value);
+      setDaily(result.daily);
+      setStreak(result.streak);
+    }
   };
 
   const nextBoke = () => {
     tts.cancel();
     if (speech.isListening) speech.stop();
     recorder.cancel();
+    if (phase === "daily") {
+      // daily challenge is one-shot per day, return to start
+      goToStart();
+      return;
+    }
     setCurrentBoke((prev) =>
       phase === "image"
         ? pickRandom(imageBokes, prev.id)
@@ -357,7 +423,43 @@ function App() {
         </header>
 
         <section className="start-screen">
-          <p className="start-lead">モードを選んでスタート！</p>
+          <div className="daily-card">
+            <div className="daily-header">
+              <span className="daily-title">🎯 今日のお題</span>
+              {streak.currentStreak > 0 && (
+                <span className="daily-streak">
+                  🔥 {streak.currentStreak}日連続
+                </span>
+              )}
+            </div>
+            <p className="daily-sub">
+              {daily.completed
+                ? "今日はもう挑戦済み！明日も続けてストリークを伸ばそう"
+                : "全員共通の日替わりお題。1日1回、瞬発力を試そう"}
+            </p>
+            <button
+              type="button"
+              className={`daily-button${daily.completed ? " done" : ""}`}
+              onClick={() => startMode("daily")}
+            >
+              {daily.completed
+                ? `✅ 完了！「${daily.tsukkomi ?? ""}」`
+                : "今日のお題に挑戦 →"}
+            </button>
+            {streak.longestStreak > 0 && (
+              <p className="daily-best">
+                最長連続: <strong>{streak.longestStreak}日</strong>
+                {history.length > 0 && (
+                  <>
+                    {" / 累計ツッコミ: "}
+                    <strong>{history.length}</strong>
+                  </>
+                )}
+              </p>
+            )}
+          </div>
+
+          <p className="start-lead">または、自由にツッコミ練習！</p>
           <div className="start-buttons">
             <button
               type="button"
@@ -380,6 +482,12 @@ function App() {
           </div>
           <p className="start-note">
             初回はマイクの許可ダイアログが出ます。「許可」を押してください。
+            {historyLoaded && history.length > 0 && (
+              <>
+                <br />
+                ツッコミ履歴は端末に保存されています（{history.length}件）。
+              </>
+            )}
           </p>
         </section>
       </div>
@@ -401,9 +509,11 @@ function App() {
           <span className="title-mark right">▼</span>
         </div>
         <p className="subtitle">
-          {phase === "image"
-            ? "📷 画像モード — この絵を見てツッコめ！"
-            : "💬 通常モード — このボケにツッコめ！"}
+          {phase === "daily"
+            ? "🎯 今日のお題 — 全員共通の日替わり挑戦！"
+            : phase === "image"
+              ? "📷 画像モード — この絵を見てツッコめ！"
+              : "💬 通常モード — このボケにツッコめ！"}
         </p>
       </header>
 

@@ -21,9 +21,23 @@
     <meta name="twitter:title" content="ツッコめッ！！ - ボケに即興でツッコめ！" />
     <meta name="twitter:description" content="ボケのお題に対してツッコミを練習するWebアプリ。" />
     <meta name="twitter:image" content="https://tsukkome.vercel.app/ogp.png" />
+
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#ff3d7f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="ツッコめッ" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

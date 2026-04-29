@@ -42,11 +42,93 @@
   margin-bottom: 32px;
 }
 
+/* Daily challenge card */
+.daily-card {
+  background: linear-gradient(135deg, #ff3d7f 0%, #ffd400 100%);
+  border: 4px solid #1a1a1a;
+  border-radius: 18px;
+  padding: 22px 24px;
+  margin-bottom: 32px;
+  box-shadow: 8px 8px 0 #1a1a1a;
+  text-align: left;
+  color: #1a1a1a;
+}
+
+.daily-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.daily-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.daily-streak {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.daily-sub {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.daily-button {
+  width: 100%;
+  background: #1a1a1a;
+  color: #fff;
+  border: 3px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.1s;
+  box-shadow: 4px 4px 0 #fff;
+  letter-spacing: 0.05em;
+}
+
+.daily-button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 #fff;
+}
+
+.daily-button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #fff;
+}
+
+.daily-button.done {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.daily-best {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin: 12px 0 0;
+  text-align: center;
+  opacity: 0.85;
+}
+
 .start-lead {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #1a1a1a;
-  margin: 0 0 24px;
+  margin: 0 0 18px;
 }
 
 .start-buttons {

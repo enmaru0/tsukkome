@@ -42,7 +42,7 @@ export const useAudioRecorder = () => {
     }
   }, [supported, isRecording]);
 
-  const stop = useCallback((): Promise<{ url: string; mimeType: string } | null> => {
+  const stop = useCallback((): Promise<{ url: string; mimeType: string; blob: Blob } | null> => {
     return new Promise((resolve) => {
       const recorder = recorderRef.current;
       if (!recorder || recorder.state === "inactive") {
@@ -61,7 +61,7 @@ export const useAudioRecorder = () => {
           recorderRef.current = null;
           chunksRef.current = [];
           setIsRecording(false);
-          resolve(url ? { url, mimeType } : null);
+          resolve(url ? { url, mimeType, blob } : null);
         },
         { once: true },
       );
