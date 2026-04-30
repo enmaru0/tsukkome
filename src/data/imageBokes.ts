@@ -1,3 +1,5 @@
+import type { BokeCategory, BokeDifficulty } from "./categories";
+
 export type ImageBoke = {
   kind: "image";
   id: number;
@@ -5,6 +7,8 @@ export type ImageBoke = {
   title: string;
   examples: string[];
   examplesTatoe: string[];
+  category: BokeCategory;
+  difficulty: BokeDifficulty;
 };
 
 export const imageBokes: ImageBoke[] = [
@@ -18,6 +22,8 @@ export const imageBokes: ImageBoke[] = [
       "サファリパークの営業マンか！",
       "朝刊配達の新人かお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -29,6 +35,8 @@ export const imageBokes: ImageBoke[] = [
       "銭湯の裏メニューか！",
       "湯船がラーメン屋かお前の家は！",
     ],
+    category: "food",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -40,6 +48,8 @@ export const imageBokes: ImageBoke[] = [
       "時代錯誤の営業電話か！",
       "化石界のセールスマンかお前は！",
     ],
+    category: "fantasy",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -51,6 +61,8 @@ export const imageBokes: ImageBoke[] = [
       "水中独裁国家の君主か！",
       "深海の戴冠式の主役かお前は！",
     ],
+    category: "animal",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -62,6 +74,8 @@ export const imageBokes: ImageBoke[] = [
       "紳士気取りの水鳥か！",
       "お天気に敏感すぎる南極住民かお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -73,6 +87,8 @@ export const imageBokes: ImageBoke[] = [
       "配達業界の究極形態か！",
       "自走式イタリアンかお前は！",
     ],
+    category: "food",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -84,6 +100,8 @@ export const imageBokes: ImageBoke[] = [
       "サバンナのツール・ド・フランス出場者か！",
       "オリンピック強化選手の哺乳類かお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -95,6 +113,8 @@ export const imageBokes: ImageBoke[] = [
       "貴族階級の軽食か！",
       "社交界デビュー中のソーセージかお前は！",
     ],
+    category: "food",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -106,6 +126,8 @@ export const imageBokes: ImageBoke[] = [
       "世界最速のカタツムリか！",
       "NASA 実験対象の軟体動物かお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -117,6 +139,8 @@ export const imageBokes: ImageBoke[] = [
       "客を審査するファストフードか！",
       "マクドナルドの監視役かお前は！",
     ],
+    category: "food",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -128,6 +152,8 @@ export const imageBokes: ImageBoke[] = [
       "上野動物園発の演歌歌手か！",
       "紅白出場狙いの絶滅危惧種かお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -139,6 +165,8 @@ export const imageBokes: ImageBoke[] = [
       "パリコレ出場の植物か！",
       "ファッション業界の新星サボテンかお前は！",
     ],
+    category: "daily",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -150,6 +178,8 @@ export const imageBokes: ImageBoke[] = [
       "海底図書館の常連か！",
       "東大受験狙いの軟体動物かお前は！",
     ],
+    category: "animal",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -161,6 +191,8 @@ export const imageBokes: ImageBoke[] = [
       "森のボディビルダーか！",
       "マッチョ界の新星キノコかお前は！",
     ],
+    category: "daily",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -172,6 +204,8 @@ export const imageBokes: ImageBoke[] = [
       "オーストラリア発 TikToker か！",
       "Z世代の有袋類かお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -183,6 +217,8 @@ export const imageBokes: ImageBoke[] = [
       "グラミー賞狙いの水鳥か！",
       "ロック界の新人アヒルかお前は！",
     ],
+    category: "animal",
+    difficulty: "easy",
   },
   {
     kind: "image",
@@ -194,6 +230,8 @@ export const imageBokes: ImageBoke[] = [
       "パパラッチから逃げる菓子か！",
       "ハリウッド進出狙いのドーナツかお前は！",
     ],
+    category: "food",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -205,6 +243,8 @@ export const imageBokes: ImageBoke[] = [
       "海底レストランのシェフか！",
       "8本足で鉄板焼きする職人かお前は！",
     ],
+    category: "animal",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -216,6 +256,8 @@ export const imageBokes: ImageBoke[] = [
       "メキシコ料理界のマエストロか！",
       "ショパンの生まれ変わりの軽食かお前は！",
     ],
+    category: "food",
+    difficulty: "medium",
   },
   {
     kind: "image",
@@ -227,5 +269,202 @@ export const imageBokes: ImageBoke[] = [
       "両生類界の大イベントか！",
       "水辺で愛を誓う新郎新婦かお前は！",
     ],
+    category: "animal",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 21,
+    emoji: "🐧🥋",
+    title: "氷上のサムライ",
+    examples: ["ペンギン空手するかい！", "そんな寒い場所で蹴れるか！"],
+    examplesTatoe: [
+      "南極道場の達人か！",
+      "氷の上の武道家かお前は！",
+    ],
+    category: "animal",
+    difficulty: "easy",
+  },
+  {
+    kind: "image",
+    id: 22,
+    emoji: "🦔🎩",
+    title: "礼儀正しいハリ",
+    examples: ["ハリネズミに帽子はあかんやろ！", "刺さってまうやろ！"],
+    examplesTatoe: [
+      "森の貴族か！",
+      "上流階級のハリネズミかお前は！",
+    ],
+    category: "animal",
+    difficulty: "easy",
+  },
+  {
+    kind: "image",
+    id: 23,
+    emoji: "🦆📚",
+    title: "知性派アヒル",
+    examples: ["アヒル文字読めるかい！", "ガチョウ語の本ちゃうか！"],
+    examplesTatoe: [
+      "池の図書館員か！",
+      "東大目指す水鳥かお前は！",
+    ],
+    category: "animal",
+    difficulty: "easy",
+  },
+  {
+    kind: "image",
+    id: 24,
+    emoji: "🐢🛸",
+    title: "急ぎのカメ",
+    examples: ["カメに UFO の意味あるかい！", "速くなりすぎや！"],
+    examplesTatoe: [
+      "宇宙進出した両生類か！",
+      "甲羅から UFO 出した怪獣かお前は！",
+    ],
+    category: "fantasy",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 25,
+    emoji: "🦄💼",
+    title: "出社する伝説",
+    examples: ["ユニコーンサラリーマンするかい！", "角に書類引っかかるやろ！"],
+    examplesTatoe: [
+      "伝説の管理職か！",
+      "ファンタジー界の労働者かお前は！",
+    ],
+    category: "work",
+    difficulty: "easy",
+  },
+  {
+    kind: "image",
+    id: 26,
+    emoji: "🐔🎓",
+    title: "卒業ニワトリ",
+    examples: ["ニワトリ大学行くかい！", "コケコッコー言うてる場合か！"],
+    examplesTatoe: [
+      "鶏舎の博士か！",
+      "養鶏界のエリートかお前は！",
+    ],
+    category: "school",
+    difficulty: "easy",
+  },
+  {
+    kind: "image",
+    id: 27,
+    emoji: "🦓👮",
+    title: "横断歩道の警備員",
+    examples: ["シマウマ警察するんかい！", "横断歩道に紛れたら見えへんやろ！"],
+    examplesTatoe: [
+      "生まれつき制服着てる職員か！",
+      "サバンナ警察の特殊部隊員かお前は！",
+    ],
+    category: "work",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 28,
+    emoji: "🐰🍷",
+    title: "高級フレンチの客",
+    examples: ["うさぎ酒飲むかい！", "酔うてピョンピョン跳ぶで！"],
+    examplesTatoe: [
+      "バニーガールの新人か！",
+      "イースター夜の街でワイン会かお前は！",
+    ],
+    category: "food",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 29,
+    emoji: "🐊⚽",
+    title: "決勝のディフェンダー",
+    examples: ["ワニ蹴ったら噛まれるやろ！", "公式戦に動物入れんな！"],
+    examplesTatoe: [
+      "ジュラシックリーグの選手か！",
+      "ピッチに住み着いた爬虫類かお前は！",
+    ],
+    category: "sports",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 30,
+    emoji: "🦗💪",
+    title: "鍛えた昆虫",
+    examples: ["バッタ筋肉つけたら飛べんやろ！", "昆虫が筋肉つける必要あるかい！"],
+    examplesTatoe: [
+      "昆虫界のボディビル王か！",
+      "ジムに通う甲虫かお前は！",
+    ],
+    category: "animal",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 31,
+    emoji: "🐢💻",
+    title: "エンジニアの亀",
+    examples: ["カメコード書けるかい！", "進捗どないなっとんねん！"],
+    examplesTatoe: [
+      "IT業界の慢性遅延担当か！",
+      "リモートワークの亀社員かお前は！",
+    ],
+    category: "work",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 32,
+    emoji: "🦨🎤",
+    title: "臭いがいい歌",
+    examples: ["スカンク歌うんかい！", "観客逃げるやろ！"],
+    examplesTatoe: [
+      "コンサート会場の臭気テロリストか！",
+      "歌唱力より匂いの歌手かお前は！",
+    ],
+    category: "animal",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 33,
+    emoji: "🐠🚲",
+    title: "陸上派の魚",
+    examples: ["魚自転車乗れるかい！", "水なくて死ぬわ！"],
+    examplesTatoe: [
+      "陸地進出を目指す水中生物か！",
+      "都会派の海洋生物かお前は！",
+    ],
+    category: "animal",
+    difficulty: "medium",
+  },
+  {
+    kind: "image",
+    id: 34,
+    emoji: "🦝🎮",
+    title: "夜更かしのタヌキ",
+    examples: ["タヌキゲームするかい！", "化けて何のキャラやってんねん！"],
+    examplesTatoe: [
+      "森のeスポーツ選手か！",
+      "夜行性プロゲーマーかお前は！",
+    ],
+    category: "daily",
+    difficulty: "easy",
+  },
+  {
+    kind: "image",
+    id: 35,
+    emoji: "🐝📞",
+    title: "営業中のハチ",
+    examples: ["ハチが営業電話するかい！", "蜂蜜の宣伝か！"],
+    examplesTatoe: [
+      "養蜂業界のテレアポ担当か！",
+      "巣箱からの営業電話かお前は！",
+    ],
+    category: "work",
+    difficulty: "easy",
   },
 ];

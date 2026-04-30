@@ -42,88 +42,6 @@
   margin-bottom: 32px;
 }
 
-/* Daily challenge card */
-.daily-card {
-  background: linear-gradient(135deg, #ff3d7f 0%, #ffd400 100%);
-  border: 4px solid #1a1a1a;
-  border-radius: 18px;
-  padding: 22px 24px;
-  margin-bottom: 32px;
-  box-shadow: 8px 8px 0 #1a1a1a;
-  text-align: left;
-  color: #1a1a1a;
-}
-
-.daily-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.daily-title {
-  font-size: 1.35rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-}
-
-.daily-streak {
-  background: #1a1a1a;
-  color: #fff;
-  padding: 4px 14px;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  font-weight: 800;
-}
-
-.daily-sub {
-  font-size: 0.88rem;
-  font-weight: 600;
-  margin: 0 0 14px;
-  line-height: 1.5;
-}
-
-.daily-button {
-  width: 100%;
-  background: #1a1a1a;
-  color: #fff;
-  border: 3px solid #1a1a1a;
-  border-radius: 12px;
-  padding: 14px 20px;
-  font-size: 1.05rem;
-  font-weight: 900;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.1s;
-  box-shadow: 4px 4px 0 #fff;
-  letter-spacing: 0.05em;
-}
-
-.daily-button:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 #fff;
-}
-
-.daily-button:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 #fff;
-}
-
-.daily-button.done {
-  background: #fff;
-  color: #1a1a1a;
-}
-
-.daily-best {
-  font-size: 0.78rem;
-  font-weight: 600;
-  margin: 12px 0 0;
-  text-align: center;
-  opacity: 0.85;
-}
-
 .start-lead {
   font-size: 1.05rem;
   font-weight: 800;
@@ -190,6 +108,110 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: #5a4a3a;
+}
+
+.filter-panel {
+  background: #fff;
+  border: 3px solid #1a1a1a;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 0 0 24px;
+  box-shadow: 4px 4px 0 #1a1a1a;
+  text-align: left;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.filter-row:last-of-type {
+  margin-bottom: 0;
+}
+
+.filter-row label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  flex-shrink: 0;
+  width: 70px;
+}
+
+.filter-row select {
+  flex: 1;
+  background: #fffbef;
+  color: #1a1a1a;
+  border: 2.5px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #1a1a1a;
+}
+
+.filter-row select:focus {
+  outline: none;
+  background: #fff;
+}
+
+.filter-reset {
+  margin-top: 10px;
+  background: transparent;
+  color: #ff3d7f;
+  border: 2px solid #ff3d7f;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.1s;
+}
+
+.filter-reset:hover {
+  background: #ff3d7f;
+  color: #fff;
+}
+
+/* Tags on boke card */
+.boke-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border: 2px solid #1a1a1a;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.tag.category {
+  background: #fff5d6;
+  color: #1a1a1a;
+}
+
+.tag.difficulty.d-easy {
+  background: #b6f0c8;
+  color: #1a1a1a;
+}
+
+.tag.difficulty.d-medium {
+  background: #ffd400;
+  color: #1a1a1a;
+}
+
+.tag.difficulty.d-hard {
+  background: #ff3d7f;
+  color: #fff;
 }
 
 .start-note {

@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { bokes, type AnyBoke } from "./data/bokes";
+import {
+  CATEGORIES,
+  DIFFICULTIES,
+  categoryLabel,
+  difficultyLabel,
+  type BokeCategory,
+  type BokeDifficulty,
+} from "./data/categories";
 import { imageBokes } from "./data/imageBokes";
 import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
 import type { InputMode } from "./types";
-import {
-  completeDaily,
-  getDailyBoke,
-  loadDaily,
-  refreshStreak,
-  type DailyRecord,
-  type StreakData,
-} from "./utils/daily";
 import { generateVideo, isVideoSupported } from "./utils/generateVideo";
 import {
   loadAllEntries,
@@ -21,7 +21,7 @@ import {
   type StoredEntry,
 } from "./utils/storage";
 
-type Phase = "start" | "text" | "image" | "daily";
+type Phase = "start" | "text" | "image";
 
 type HistoryEntry = {
   boke: AnyBoke;
@@ -37,13 +37,71 @@ const TIME_LIMIT = 30;
 const SITE_URL = "https://tsukkome.vercel.app/";
 const HASHTAG = "ツッコめッ";
 
+type FilterableBoke = {
+  id: number;
+  category: BokeCategory;
+  difficulty: BokeDifficulty;
+};
+
+type Filters = {
+  category: BokeCategory | "all";
+  difficulty: BokeDifficulty | "all";
+};
+
+const FILTERS_KEY = "tsukkome:filters";
+
+const loadFilters = (): Filters => {
+  if (typeof window === "undefined") return { category: "all", difficulty: "all" };
+  try {
+    const raw = window.localStorage.getItem(FILTERS_KEY);
+    if (!raw) return { category: "all", difficulty: "all" };
+    const parsed = JSON.parse(raw);
+    return {
+      category: parsed.category ?? "all",
+      difficulty: parsed.difficulty ?? "all",
+    };
+  } catch {
+    return { category: "all", difficulty: "all" };
+  }
+};
+
+const saveFilters = (f: Filters) => {
+  try {
+    window.localStorage.setItem(FILTERS_KEY, JSON.stringify(f));
+  } catch {
+    // ignore
+  }
+};
+
+const applyFilters = <T extends FilterableBoke>(list: T[], f: Filters): T[] => {
+  return list.filter(
+    (b) =>
+      (f.category === "all" || b.category === f.category) &&
+      (f.difficulty === "all" || b.difficulty === f.difficulty),
+  );
+};
+
 const pickRandom = <T extends { id: number }>(list: T[], excludeId?: number): T => {
+  if (list.length === 0) throw new Error("empty list");
   if (list.length === 1) return list[0];
   let next = list[Math.floor(Math.random() * list.length)];
   while (excludeId !== undefined && next.id === excludeId) {
     next = list[Math.floor(Math.random() * list.length)];
   }
   return next;
+};
+
+const pickFiltered = <T extends FilterableBoke>(
+  list: T[],
+  filters: Filters,
+  excludeId?: number,
+): T => {
+  const filtered = applyFilters(list, filters);
+  if (filtered.length === 0) {
+    // fall back to whole list if filter yields nothing
+    return pickRandom(list, excludeId);
+  }
+  return pickRandom(filtered, excludeId);
 };
 
 const bokeToSetupText = (boke: AnyBoke): string =>
@@ -119,9 +177,21 @@ function App() {
   const [currentBoke, setCurrentBoke] = useState<AnyBoke>(() =>
     pickRandom(bokes),
   );
-  const [daily, setDaily] = useState<DailyRecord>(() => loadDaily());
-  const [streak, setStreak] = useState<StreakData>(() => refreshStreak());
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [filters, setFiltersState] = useState<Filters>(() => loadFilters());
+
+  const setFilters = (f: Filters) => {
+    setFiltersState(f);
+    saveFilters(f);
+  };
+
+  const filteredCounts = useMemo(
+    () => ({
+      text: applyFilters(bokes, filters).length,
+      image: applyFilters(imageBokes, filters).length,
+    }),
+    [filters],
+  );
   const [mode, setMode] = useState<InputMode>("voice");
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
@@ -234,13 +304,11 @@ function App() {
 
   const currentInput = mode === "text" ? text : voiceText;
 
-  const startMode = (next: "text" | "image" | "daily") => {
+  const startMode = (next: "text" | "image") => {
     const initialBoke =
       next === "text"
-        ? pickRandom(bokes)
-        : next === "image"
-          ? pickRandom(imageBokes)
-          : getDailyBoke();
+        ? pickFiltered(bokes, filters)
+        : pickFiltered(imageBokes, filters);
     setCurrentBoke(initialBoke);
     setShowExamples(false);
     setLastSubmission(null);
@@ -301,27 +369,16 @@ function App() {
       audioBlob,
       audioMime,
     });
-
-    if (phase === "daily") {
-      const result = completeDaily(value);
-      setDaily(result.daily);
-      setStreak(result.streak);
-    }
   };
 
   const nextBoke = () => {
     tts.cancel();
     if (speech.isListening) speech.stop();
     recorder.cancel();
-    if (phase === "daily") {
-      // daily challenge is one-shot per day, return to start
-      goToStart();
-      return;
-    }
     setCurrentBoke((prev) =>
       phase === "image"
-        ? pickRandom(imageBokes, prev.id)
-        : pickRandom(bokes, prev.id),
+        ? pickFiltered(imageBokes, filters, prev.id)
+        : pickFiltered(bokes, filters, prev.id),
     );
     setText("");
     speech.reset();
@@ -423,63 +480,98 @@ function App() {
         </header>
 
         <section className="start-screen">
-          <div className="daily-card">
-            <div className="daily-header">
-              <span className="daily-title">🎯 今日のお題</span>
-              {streak.currentStreak > 0 && (
-                <span className="daily-streak">
-                  🔥 {streak.currentStreak}日連続
-                </span>
-              )}
-            </div>
-            <p className="daily-sub">
-              {daily.completed
-                ? "今日はもう挑戦済み！明日も続けてストリークを伸ばそう"
-                : "全員共通の日替わりお題。1日1回、瞬発力を試そう"}
-            </p>
-            <button
-              type="button"
-              className={`daily-button${daily.completed ? " done" : ""}`}
-              onClick={() => startMode("daily")}
-            >
-              {daily.completed
-                ? `✅ 完了！「${daily.tsukkomi ?? ""}」`
-                : "今日のお題に挑戦 →"}
-            </button>
-            {streak.longestStreak > 0 && (
-              <p className="daily-best">
-                最長連続: <strong>{streak.longestStreak}日</strong>
-                {history.length > 0 && (
-                  <>
-                    {" / 累計ツッコミ: "}
-                    <strong>{history.length}</strong>
-                  </>
-                )}
-              </p>
-            )}
-          </div>
-
-          <p className="start-lead">または、自由にツッコミ練習！</p>
+          <p className="start-lead">モードを選んでスタート！</p>
           <div className="start-buttons">
             <button
               type="button"
               className="start-button text-mode"
               onClick={() => startMode("text")}
+              disabled={filteredCounts.text === 0}
+              title={
+                filteredCounts.text === 0
+                  ? "現在のフィルタに該当するお題がありません"
+                  : ""
+              }
             >
               <div className="start-button-emoji">💬</div>
               <div className="start-button-title">通常モード</div>
-              <div className="start-button-desc">文字のお題にツッコむ</div>
+              <div className="start-button-desc">
+                文字のお題にツッコむ（{filteredCounts.text}）
+              </div>
             </button>
             <button
               type="button"
               className="start-button image-mode"
               onClick={() => startMode("image")}
+              disabled={filteredCounts.image === 0}
+              title={
+                filteredCounts.image === 0
+                  ? "現在のフィルタに該当するお題がありません"
+                  : ""
+              }
             >
               <div className="start-button-emoji">📷</div>
               <div className="start-button-title">画像モード</div>
-              <div className="start-button-desc">絵のお題にツッコむ</div>
+              <div className="start-button-desc">
+                絵のお題にツッコむ（{filteredCounts.image}）
+              </div>
             </button>
           </div>
+
+          <div className="filter-panel">
+            <div className="filter-row">
+              <label htmlFor="f-difficulty">難易度</label>
+              <select
+                id="f-difficulty"
+                value={filters.difficulty}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    difficulty: e.target.value as BokeDifficulty | "all",
+                  })
+                }
+              >
+                <option value="all">全て</option>
+                {DIFFICULTIES.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-row">
+              <label htmlFor="f-category">カテゴリ</label>
+              <select
+                id="f-category"
+                value={filters.category}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    category: e.target.value as BokeCategory | "all",
+                  })
+                }
+              >
+                <option value="all">全て</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.emoji} {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {(filters.category !== "all" || filters.difficulty !== "all") && (
+              <button
+                type="button"
+                className="filter-reset"
+                onClick={() =>
+                  setFilters({ category: "all", difficulty: "all" })
+                }
+              >
+                フィルタをクリア
+              </button>
+            )}
+          </div>
+
           <p className="start-note">
             初回はマイクの許可ダイアログが出ます。「許可」を押してください。
             {historyLoaded && history.length > 0 && (
@@ -509,11 +601,9 @@ function App() {
           <span className="title-mark right">▼</span>
         </div>
         <p className="subtitle">
-          {phase === "daily"
-            ? "🎯 今日のお題 — 全員共通の日替わり挑戦！"
-            : phase === "image"
-              ? "📷 画像モード — この絵を見てツッコめ！"
-              : "💬 通常モード — このボケにツッコめ！"}
+          {phase === "image"
+            ? "📷 画像モード — この絵を見てツッコめ！"
+            : "💬 通常モード — このボケにツッコめ！"}
         </p>
       </header>
 
@@ -529,6 +619,14 @@ function App() {
                   : timeLeft === 0
                     ? "💥 時間切れ！"
                     : "準備中"}
+            </span>
+          </div>
+          <div className="boke-tags">
+            <span className={`tag difficulty d-${currentBoke.difficulty}`}>
+              {difficultyLabel(currentBoke.difficulty)}
+            </span>
+            <span className="tag category">
+              {categoryLabel(currentBoke.category)}
             </span>
           </div>
           <div className="boke-bubble">
@@ -566,6 +664,14 @@ function App() {
                   : timeLeft === 0
                     ? "💥 時間切れ！"
                     : "準備中"}
+            </span>
+          </div>
+          <div className="boke-tags">
+            <span className={`tag difficulty d-${currentBoke.difficulty}`}>
+              {difficultyLabel(currentBoke.difficulty)}
+            </span>
+            <span className="tag category">
+              {categoryLabel(currentBoke.category)}
             </span>
           </div>
           <div className="image-frame">
