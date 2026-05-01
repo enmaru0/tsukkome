@@ -1,5 +1,3 @@
-import type { BokeCategory, BokeDifficulty } from "./categories";
-
 export type ImageBoke = {
   kind: "image";
   id: number;
@@ -7,8 +5,6 @@ export type ImageBoke = {
   title: string;
   examples: string[];
   examplesTatoe: string[];
-  category: BokeCategory;
-  difficulty: BokeDifficulty;
 };
 
 export const imageBokes: ImageBoke[] = [
@@ -18,12 +14,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐘🏠",
     title: "朝の訪問者",
     examples: ["象が訪問してくるかい！", "どこから来たんや！"],
-    examplesTatoe: [
-      "サファリパークの営業マンか！",
-      "朝刊配達の新人かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["サファリパークの営業マンか！", "朝刊配達の新人かお前は！"],
   },
   {
     kind: "image",
@@ -31,12 +22,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🍜🚿",
     title: "怪しいシャワー",
     examples: ["シャワーから麺出るかい！", "配管料理屋になっとるで！"],
-    examplesTatoe: [
-      "銭湯の裏メニューか！",
-      "湯船がラーメン屋かお前の家は！",
-    ],
-    category: "food",
-    difficulty: "easy",
+    examplesTatoe: ["銭湯の裏メニューか！", "湯船がラーメン屋かお前の家は！"],
   },
   {
     kind: "image",
@@ -44,12 +30,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦖📞",
     title: "白亜紀からの着信",
     examples: ["恐竜電話すんな！", "絶滅したんちゃうんかい！"],
-    examplesTatoe: [
-      "時代錯誤の営業電話か！",
-      "化石界のセールスマンかお前は！",
-    ],
-    category: "fantasy",
-    difficulty: "medium",
+    examplesTatoe: ["時代錯誤の営業電話か！", "化石界のセールスマンかお前は！"],
   },
   {
     kind: "image",
@@ -57,12 +38,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐟👑",
     title: "深海の王様",
     examples: ["魚が王様気取るな！", "海底で何治めてんねん！"],
-    examplesTatoe: [
-      "水中独裁国家の君主か！",
-      "深海の戴冠式の主役かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["水中独裁国家の君主か！", "深海の戴冠式の主役かお前は！"],
   },
   {
     kind: "image",
@@ -70,12 +46,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐧☂️",
     title: "雨具ペンギン",
     examples: ["ペンギン濡れへんやろ！", "南極に傘いらんわ！"],
-    examplesTatoe: [
-      "紳士気取りの水鳥か！",
-      "お天気に敏感すぎる南極住民かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["紳士気取りの水鳥か！", "お天気に敏感すぎる南極住民かお前は！"],
   },
   {
     kind: "image",
@@ -83,12 +54,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🍕🚗",
     title: "疾走するピザ",
     examples: ["それピザやないか！", "なんで車輪付いてんねん！"],
-    examplesTatoe: [
-      "配達業界の究極形態か！",
-      "自走式イタリアンかお前は！",
-    ],
-    category: "food",
-    difficulty: "easy",
+    examplesTatoe: ["配達業界の究極形態か！", "自走式イタリアンかお前は！"],
   },
   {
     kind: "image",
@@ -96,12 +62,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦒🚴",
     title: "サイクリングキリン",
     examples: ["キリン自転車乗れるかい！", "首ぶつけるやろ！"],
-    examplesTatoe: [
-      "サバンナのツール・ド・フランス出場者か！",
-      "オリンピック強化選手の哺乳類かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["サバンナのツール・ド・フランス出場者か！", "オリンピック強化選手の哺乳類かお前は！"],
   },
   {
     kind: "image",
@@ -109,12 +70,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🌭🎩",
     title: "紳士なホットドッグ",
     examples: ["食べ物に帽子いらんやろ！", "どこのジェントルマンやねん！"],
-    examplesTatoe: [
-      "貴族階級の軽食か！",
-      "社交界デビュー中のソーセージかお前は！",
-    ],
-    category: "food",
-    difficulty: "easy",
+    examplesTatoe: ["貴族階級の軽食か！", "社交界デビュー中のソーセージかお前は！"],
   },
   {
     kind: "image",
@@ -122,12 +78,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐌🚀",
     title: "急ぎのカタツムリ",
     examples: ["カタツムリにロケットいらんやろ！", "殻吹っ飛ぶわ！"],
-    examplesTatoe: [
-      "世界最速のカタツムリか！",
-      "NASA 実験対象の軟体動物かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["世界最速のカタツムリか！", "NASA 実験対象の軟体動物かお前は！"],
   },
   {
     kind: "image",
@@ -135,12 +86,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🍔👁️",
     title: "見つめるハンバーガー",
     examples: ["バーガーに目ついとる！", "食いにくいわ！"],
-    examplesTatoe: [
-      "客を審査するファストフードか！",
-      "マクドナルドの監視役かお前は！",
-    ],
-    category: "food",
-    difficulty: "easy",
+    examplesTatoe: ["客を審査するファストフードか！", "マクドナルドの監視役かお前は！"],
   },
   {
     kind: "image",
@@ -148,12 +94,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐼🎤",
     title: "熱唱するパンダ",
     examples: ["パンダ歌うんかい！", "何歌っとんねん！"],
-    examplesTatoe: [
-      "上野動物園発の演歌歌手か！",
-      "紅白出場狙いの絶滅危惧種かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["上野動物園発の演歌歌手か！", "紅白出場狙いの絶滅危惧種かお前は！"],
   },
   {
     kind: "image",
@@ -161,12 +102,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🌵👠",
     title: "オシャレサボテン",
     examples: ["サボテンにヒール似合わんやろ！", "歩けるんかそれ！"],
-    examplesTatoe: [
-      "パリコレ出場の植物か！",
-      "ファッション業界の新星サボテンかお前は！",
-    ],
-    category: "daily",
-    difficulty: "medium",
+    examplesTatoe: ["パリコレ出場の植物か！", "ファッション業界の新星サボテンかお前は！"],
   },
   {
     kind: "image",
@@ -174,12 +110,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦑📚",
     title: "読書家のイカ",
     examples: ["イカ本読むかい！", "墨でページ汚すやろ！"],
-    examplesTatoe: [
-      "海底図書館の常連か！",
-      "東大受験狙いの軟体動物かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["海底図書館の常連か！", "東大受験狙いの軟体動物かお前は！"],
   },
   {
     kind: "image",
@@ -187,12 +118,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🍄💪",
     title: "鍛えるキノコ",
     examples: ["キノコ鍛えてどうすんねん！", "菌類が筋肉つけるな！"],
-    examplesTatoe: [
-      "森のボディビルダーか！",
-      "マッチョ界の新星キノコかお前は！",
-    ],
-    category: "daily",
-    difficulty: "medium",
+    examplesTatoe: ["森のボディビルダーか！", "マッチョ界の新星キノコかお前は！"],
   },
   {
     kind: "image",
@@ -200,12 +126,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐨📱",
     title: "スマホ中のコアラ",
     examples: ["コアラがスマホ触るな！", "木から落ちるで！"],
-    examplesTatoe: [
-      "オーストラリア発 TikToker か！",
-      "Z世代の有袋類かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["オーストラリア発 TikToker か！", "Z世代の有袋類かお前は！"],
   },
   {
     kind: "image",
@@ -213,12 +134,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦆🎸",
     title: "ギター弾きアヒル",
     examples: ["アヒル指ないやろ！", "コード押されへんわ！"],
-    examplesTatoe: [
-      "グラミー賞狙いの水鳥か！",
-      "ロック界の新人アヒルかお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["グラミー賞狙いの水鳥か！", "ロック界の新人アヒルかお前は！"],
   },
   {
     kind: "image",
@@ -226,12 +142,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🍩🕶️",
     title: "セレブなドーナツ",
     examples: ["ドーナツに顔ないやろ！", "穴から覗いとるんか！"],
-    examplesTatoe: [
-      "パパラッチから逃げる菓子か！",
-      "ハリウッド進出狙いのドーナツかお前は！",
-    ],
-    category: "food",
-    difficulty: "medium",
+    examplesTatoe: ["パパラッチから逃げる菓子か！", "ハリウッド進出狙いのドーナツかお前は！"],
   },
   {
     kind: "image",
@@ -239,12 +150,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐙👨‍🍳",
     title: "料理するタコ",
     examples: ["タコが料理するかい！", "仲間売るんか！"],
-    examplesTatoe: [
-      "海底レストランのシェフか！",
-      "8本足で鉄板焼きする職人かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["海底レストランのシェフか！", "8本足で鉄板焼きする職人かお前は！"],
   },
   {
     kind: "image",
@@ -252,12 +158,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🌮🎹",
     title: "演奏タコス",
     examples: ["タコスに手ないやろ！", "音楽かぶれすぎや！"],
-    examplesTatoe: [
-      "メキシコ料理界のマエストロか！",
-      "ショパンの生まれ変わりの軽食かお前は！",
-    ],
-    category: "food",
-    difficulty: "medium",
+    examplesTatoe: ["メキシコ料理界のマエストロか！", "ショパンの生まれ変わりの軽食かお前は！"],
   },
   {
     kind: "image",
@@ -265,12 +166,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐸💒",
     title: "カエルの結婚式",
     examples: ["カエル結婚すんな！", "相手誰やねん！"],
-    examplesTatoe: [
-      "両生類界の大イベントか！",
-      "水辺で愛を誓う新郎新婦かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["両生類界の大イベントか！", "水辺で愛を誓う新郎新婦かお前は！"],
   },
   {
     kind: "image",
@@ -278,12 +174,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐧🥋",
     title: "氷上のサムライ",
     examples: ["ペンギン空手するかい！", "そんな寒い場所で蹴れるか！"],
-    examplesTatoe: [
-      "南極道場の達人か！",
-      "氷の上の武道家かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["南極道場の達人か！", "氷の上の武道家かお前は！"],
   },
   {
     kind: "image",
@@ -291,12 +182,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦔🎩",
     title: "礼儀正しいハリ",
     examples: ["ハリネズミに帽子はあかんやろ！", "刺さってまうやろ！"],
-    examplesTatoe: [
-      "森の貴族か！",
-      "上流階級のハリネズミかお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["森の貴族か！", "上流階級のハリネズミかお前は！"],
   },
   {
     kind: "image",
@@ -304,12 +190,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦆📚",
     title: "知性派アヒル",
     examples: ["アヒル文字読めるかい！", "ガチョウ語の本ちゃうか！"],
-    examplesTatoe: [
-      "池の図書館員か！",
-      "東大目指す水鳥かお前は！",
-    ],
-    category: "animal",
-    difficulty: "easy",
+    examplesTatoe: ["池の図書館員か！", "東大目指す水鳥かお前は！"],
   },
   {
     kind: "image",
@@ -317,12 +198,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐢🛸",
     title: "急ぎのカメ",
     examples: ["カメに UFO の意味あるかい！", "速くなりすぎや！"],
-    examplesTatoe: [
-      "宇宙進出した両生類か！",
-      "甲羅から UFO 出した怪獣かお前は！",
-    ],
-    category: "fantasy",
-    difficulty: "medium",
+    examplesTatoe: ["宇宙進出した両生類か！", "甲羅から UFO 出した怪獣かお前は！"],
   },
   {
     kind: "image",
@@ -330,12 +206,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦄💼",
     title: "出社する伝説",
     examples: ["ユニコーンサラリーマンするかい！", "角に書類引っかかるやろ！"],
-    examplesTatoe: [
-      "伝説の管理職か！",
-      "ファンタジー界の労働者かお前は！",
-    ],
-    category: "work",
-    difficulty: "easy",
+    examplesTatoe: ["伝説の管理職か！", "ファンタジー界の労働者かお前は！"],
   },
   {
     kind: "image",
@@ -343,12 +214,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐔🎓",
     title: "卒業ニワトリ",
     examples: ["ニワトリ大学行くかい！", "コケコッコー言うてる場合か！"],
-    examplesTatoe: [
-      "鶏舎の博士か！",
-      "養鶏界のエリートかお前は！",
-    ],
-    category: "school",
-    difficulty: "easy",
+    examplesTatoe: ["鶏舎の博士か！", "養鶏界のエリートかお前は！"],
   },
   {
     kind: "image",
@@ -356,12 +222,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦓👮",
     title: "横断歩道の警備員",
     examples: ["シマウマ警察するんかい！", "横断歩道に紛れたら見えへんやろ！"],
-    examplesTatoe: [
-      "生まれつき制服着てる職員か！",
-      "サバンナ警察の特殊部隊員かお前は！",
-    ],
-    category: "work",
-    difficulty: "medium",
+    examplesTatoe: ["生まれつき制服着てる職員か！", "サバンナ警察の特殊部隊員かお前は！"],
   },
   {
     kind: "image",
@@ -369,12 +230,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐰🍷",
     title: "高級フレンチの客",
     examples: ["うさぎ酒飲むかい！", "酔うてピョンピョン跳ぶで！"],
-    examplesTatoe: [
-      "バニーガールの新人か！",
-      "イースター夜の街でワイン会かお前は！",
-    ],
-    category: "food",
-    difficulty: "medium",
+    examplesTatoe: ["バニーガールの新人か！", "イースター夜の街でワイン会かお前は！"],
   },
   {
     kind: "image",
@@ -382,12 +238,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐊⚽",
     title: "決勝のディフェンダー",
     examples: ["ワニ蹴ったら噛まれるやろ！", "公式戦に動物入れんな！"],
-    examplesTatoe: [
-      "ジュラシックリーグの選手か！",
-      "ピッチに住み着いた爬虫類かお前は！",
-    ],
-    category: "sports",
-    difficulty: "medium",
+    examplesTatoe: ["ジュラシックリーグの選手か！", "ピッチに住み着いた爬虫類かお前は！"],
   },
   {
     kind: "image",
@@ -395,12 +246,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦗💪",
     title: "鍛えた昆虫",
     examples: ["バッタ筋肉つけたら飛べんやろ！", "昆虫が筋肉つける必要あるかい！"],
-    examplesTatoe: [
-      "昆虫界のボディビル王か！",
-      "ジムに通う甲虫かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["昆虫界のボディビル王か！", "ジムに通う甲虫かお前は！"],
   },
   {
     kind: "image",
@@ -408,12 +254,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐢💻",
     title: "エンジニアの亀",
     examples: ["カメコード書けるかい！", "進捗どないなっとんねん！"],
-    examplesTatoe: [
-      "IT業界の慢性遅延担当か！",
-      "リモートワークの亀社員かお前は！",
-    ],
-    category: "work",
-    difficulty: "medium",
+    examplesTatoe: ["IT業界の慢性遅延担当か！", "リモートワークの亀社員かお前は！"],
   },
   {
     kind: "image",
@@ -421,12 +262,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦨🎤",
     title: "臭いがいい歌",
     examples: ["スカンク歌うんかい！", "観客逃げるやろ！"],
-    examplesTatoe: [
-      "コンサート会場の臭気テロリストか！",
-      "歌唱力より匂いの歌手かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["コンサート会場の臭気テロリストか！", "歌唱力より匂いの歌手かお前は！"],
   },
   {
     kind: "image",
@@ -434,12 +270,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐠🚲",
     title: "陸上派の魚",
     examples: ["魚自転車乗れるかい！", "水なくて死ぬわ！"],
-    examplesTatoe: [
-      "陸地進出を目指す水中生物か！",
-      "都会派の海洋生物かお前は！",
-    ],
-    category: "animal",
-    difficulty: "medium",
+    examplesTatoe: ["陸地進出を目指す水中生物か！", "都会派の海洋生物かお前は！"],
   },
   {
     kind: "image",
@@ -447,12 +278,7 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🦝🎮",
     title: "夜更かしのタヌキ",
     examples: ["タヌキゲームするかい！", "化けて何のキャラやってんねん！"],
-    examplesTatoe: [
-      "森のeスポーツ選手か！",
-      "夜行性プロゲーマーかお前は！",
-    ],
-    category: "daily",
-    difficulty: "easy",
+    examplesTatoe: ["森のeスポーツ選手か！", "夜行性プロゲーマーかお前は！"],
   },
   {
     kind: "image",
@@ -460,11 +286,206 @@ export const imageBokes: ImageBoke[] = [
     emoji: "🐝📞",
     title: "営業中のハチ",
     examples: ["ハチが営業電話するかい！", "蜂蜜の宣伝か！"],
-    examplesTatoe: [
-      "養蜂業界のテレアポ担当か！",
-      "巣箱からの営業電話かお前は！",
-    ],
-    category: "work",
-    difficulty: "easy",
+    examplesTatoe: ["養蜂業界のテレアポ担当か！", "巣箱からの営業電話かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 36,
+    emoji: "🐢🚀",
+    title: "急がば回れ",
+    examples: ["カメ急ぐかい！", "ロケット燃費悪いやろ！"],
+    examplesTatoe: ["JAXA 専属のカメか！", "宇宙界のスローライフかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 37,
+    emoji: "🦔🍷",
+    title: "夜の社交家",
+    examples: ["ハリネズミにワインは早いわ！", "毛で詰まるやろ！"],
+    examplesTatoe: ["森のソムリエか！", "夜の銀座を歩く哺乳類かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 38,
+    emoji: "🐍🎩",
+    title: "舞踏会の主役",
+    examples: ["蛇に帽子いらんやろ！", "ぜんぶ巻き付いてしまうわ！"],
+    examplesTatoe: ["ヴェルサイユ宮殿の招待客か！", "貴族会の異色メンバーかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 39,
+    emoji: "🦝🎤",
+    title: "森のアイドル",
+    examples: ["アライグマ歌うかい！", "観客のゴミに食われるで！"],
+    examplesTatoe: ["森の AKB か！", "ライブハウス常駐の哺乳類かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 40,
+    emoji: "🐻‍❄️🏖️",
+    title: "暑い日の選択ミス",
+    examples: ["シロクマが砂浜行くな！", "毛皮蒸れるやろ！"],
+    examplesTatoe: ["異文化交流のシロクマか！", "リゾート間違えた極地動物かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 41,
+    emoji: "🐢🥋",
+    title: "甲羅の達人",
+    examples: ["亀に道着似合わんやろ！", "甲羅で蹴れるかい！"],
+    examplesTatoe: ["スピード感ない武道家か！", "亀仙人の弟子かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 42,
+    emoji: "🐔💼",
+    title: "出社する朝",
+    examples: ["ニワトリ通勤すんな！", "コッコッコッ音うるさいわ！"],
+    examplesTatoe: ["養鶏場の管理職か！", "鳥類のサラリーマンかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 43,
+    emoji: "🦒🍦",
+    title: "首が冷える",
+    examples: ["キリンアイス食ったら遠いやろ！", "途中で溶けるわ！"],
+    examplesTatoe: ["長距離輸送中のスイーツか！", "首長系グルメ評論家かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 44,
+    emoji: "🐋🚲",
+    title: "海から街へ",
+    examples: ["クジラ自転車乗れるかい！", "サドル小さすぎや！"],
+    examplesTatoe: ["陸上進出の海洋生物か！", "ペダルが鯨油なクジラかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 45,
+    emoji: "🐡🎩",
+    title: "毒舌の貴族",
+    examples: ["フグに帽子は毒や！", "膨らんで帽子飛ぶで！"],
+    examplesTatoe: ["毒舌貴族の代表か！", "フグ料理界のジェントルマンかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 46,
+    emoji: "🦅📚",
+    title: "上空の図書館",
+    examples: ["ワシ本読めるかい！", "上空で読書すんな！"],
+    examplesTatoe: ["高所恐怖症ない学者か！", "アメリカ国章の知識人かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 47,
+    emoji: "🦘🎵",
+    title: "ポケットからギター",
+    examples: ["カンガルー歌うんかい！", "ポケットから何でも出てくるな！"],
+    examplesTatoe: ["オーストラリア発のミュージシャンか！", "袋に楽器入れる有袋類かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 48,
+    emoji: "🐧🍳",
+    title: "南極風料理",
+    examples: ["ペンギンシェフするかい！", "魚しか作れへんやろ！"],
+    examplesTatoe: ["南極ホテルの料理長か！", "氷河特化型の料理人かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 49,
+    emoji: "🐢🎮",
+    title: "リアクション 0.5fps",
+    examples: ["カメ反応遅すぎやろ！", "ゲームにならんわ！"],
+    examplesTatoe: ["低スペック搭載のゲーマーか！", "回線速度が亀並みのプレイヤーかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 50,
+    emoji: "🐝🛌",
+    title: "蜜より睡眠",
+    examples: ["ハチ働けや！", "巣どないするねん！"],
+    examplesTatoe: ["怠惰な働きバチか！", "業界の異端児かその蜂は！"],
+  },
+  {
+    kind: "image",
+    id: 51,
+    emoji: "🦏🎨",
+    title: "突き刺す芸術",
+    examples: ["サイ筆持てるかい！", "キャンバス突き破るわ！"],
+    examplesTatoe: ["パワー系の画家か！", "アートを破壊する芸術家かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 52,
+    emoji: "🐅🎂",
+    title: "縞模様のキャンドル",
+    examples: ["トラケーキ食えるかい！", "ロウソク食ってるんちゃうやろな！"],
+    examplesTatoe: ["ジャングル発のパティスリーか！", "肉食系スイーツかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 53,
+    emoji: "🦦📞",
+    title: "もしもしカワウソ",
+    examples: ["カワウソが電話するな！", "水濡れるやろ携帯！"],
+    examplesTatoe: ["水中通話のパイオニアか！", "防水仕様の哺乳類かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 54,
+    emoji: "🐎📚",
+    title: "ヒヒーン国文学",
+    examples: ["馬本読めるかい！", "ひずめでページ破るやろ！"],
+    examplesTatoe: ["競馬場の文学博士か！", "サラブレッドの教養人かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 55,
+    emoji: "🐘🍰",
+    title: "重量級スイーツ",
+    examples: ["象がケーキ食ったら全部ペロッとや！", "それ一口やないか！"],
+    examplesTatoe: ["パティシエ泣かせの客か！", "重量制限なしの食通かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 56,
+    emoji: "🦨💼",
+    title: "通勤臭",
+    examples: ["スカンク通勤すんな！", "電車の中地獄や！"],
+    examplesTatoe: ["満員電車のテロリストか！", "車内空気を変える通勤者かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 57,
+    emoji: "🐊🎻",
+    title: "顎で弾く",
+    examples: ["ワニにバイオリンは無理や！", "弓食うやろ！"],
+    examplesTatoe: ["ジャングル交響楽団のソリストか！", "顎の力で弾く演奏家かお前は！"],
+  },
+  {
+    kind: "image",
+    id: 58,
+    emoji: "🐭🚀",
+    title: "宇宙進出",
+    examples: ["ねずみが宇宙行くかい！", "酸素薄いとこ無理やろ！"],
+    examplesTatoe: ["ミッキーの兄弟か！", "宇宙開発のパイオニアねずみかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 59,
+    emoji: "🦛💃",
+    title: "プールの女王",
+    examples: ["カバ踊るかい！", "プール水溢れるやろ！"],
+    examplesTatoe: ["水中バレエの新人か！", "プールサイドのスターかお前は！"],
+  },
+  {
+    kind: "image",
+    id: 60,
+    emoji: "🐉👨‍🏫",
+    title: "炎のロールコール",
+    examples: ["ドラゴン先生するな！", "教室燃やすやろ！"],
+    examplesTatoe: ["ファンタジー学園の教育者か！", "出席取るたび教室燃やす講師かお前は！"],
   },
 ];

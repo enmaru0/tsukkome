@@ -1,4 +1,3 @@
-import type { BokeCategory, BokeDifficulty } from "./categories";
 import type { ImageBoke } from "./imageBokes";
 
 export type TextBoke = {
@@ -7,8 +6,6 @@ export type TextBoke = {
   setup: string;
   examples: string[];
   examplesTatoe: string[];
-  category: BokeCategory;
-  difficulty: BokeDifficulty;
 };
 
 export type Boke = TextBoke;
@@ -21,8 +18,6 @@ export const bokes: TextBoke[] = [
     setup: "今日さ、家の前に象がおってんけど、芸させたら逆立ちしよってん。",
     examples: ["象が逆立ちするかい！", "サーカスかいな！"],
     examplesTatoe: ["サーカス団の新人象か！", "動物園のスター選手かお前は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -30,8 +25,6 @@ export const bokes: TextBoke[] = [
     setup: "俺な、昨日100mを3秒で走ったわ。",
     examples: ["ボルトより速いやないか！", "それ人間ちゃうやろ！"],
     examplesTatoe: ["スーパーマンのいとこか！", "人間新幹線かお前は！"],
-    category: "sports",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -39,8 +32,6 @@ export const bokes: TextBoke[] = [
     setup: "コーヒーに砂糖10杯入れて飲んだら、めっちゃ美味しかってん。",
     examples: ["甘すぎやろ！", "それシロップやないか！"],
     examplesTatoe: ["駄菓子屋の店主か！", "糖分中毒の小学生かお前は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -48,8 +39,6 @@ export const bokes: TextBoke[] = [
     setup: "宝くじ買おうと思って財布開けたら、中に1億円入っててん。",
     examples: ["最初から当たっとるやないか！", "なんで気づかへんねん！"],
     examplesTatoe: ["ドラえもんのポケットか！", "気づかん長者番付かお前は！"],
-    category: "money",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -57,8 +46,6 @@ export const bokes: TextBoke[] = [
     setup: "今朝起きたら、隣に知らんおっさんが寝ててん。",
     examples: ["誰やねん！", "怖いわ！警察呼べ！"],
     examplesTatoe: ["朝刊の誤配達か！", "無料の添い寝サービスかお前は！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -66,8 +53,6 @@ export const bokes: TextBoke[] = [
     setup: "ダイエットのために、今日からケーキだけ食べることにしてん。",
     examples: ["太るに決まっとるやろ！", "それ逆効果やないか！"],
     examplesTatoe: ["逆張りダイエッターか！", "パティシエの治験対象かお前は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -75,8 +60,6 @@ export const bokes: TextBoke[] = [
     setup: "うちの犬な、しゃべるねん。昨日「おはよう」って言われたわ。",
     examples: ["犬がしゃべるかい！", "それただの空耳やろ！"],
     examplesTatoe: ["忠犬ハチ公の末裔か！", "語学堪能なインテリ犬かお前は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -84,8 +67,6 @@ export const bokes: TextBoke[] = [
     setup: "電車乗ろうと思って駅行ったら、ホームに新幹線停まっててん。乗ったわ。",
     examples: ["普通の駅に新幹線止まらんやろ！", "乗ったんかい！"],
     examplesTatoe: ["鉄オタの妄想か！", "JR の裏メニュー利用者かお前は！"],
-    category: "travel",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -93,8 +74,6 @@ export const bokes: TextBoke[] = [
     setup: "ラーメン屋でな、替え玉50回したら店主が泣いて謝ってきてん。",
     examples: ["50回はやりすぎや！", "なんで店主が謝るねん！"],
     examplesTatoe: ["麺の大食い選手権か！", "ラーメン店の敵かお前は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -102,8 +81,6 @@ export const bokes: TextBoke[] = [
     setup: "昨日コンビニ行ったら、店員がパンダやってん。",
     examples: ["パンダが店員すんな！", "動物園から脱走してきたんか！"],
     examplesTatoe: ["アニマルカフェの新入社員か！", "中国からの派遣社員かお前は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -111,8 +88,6 @@ export const bokes: TextBoke[] = [
     setup: "夢の中でな、UFOに連れ去られて宇宙人と将棋指したわ。勝った。",
     examples: ["夢の話やないか！", "宇宙人将棋強いんか弱いんかどっちやねん！"],
     examplesTatoe: ["銀河系名人戦の挑戦者か！", "宇宙人との文化交流大使かお前は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -120,8 +95,6 @@ export const bokes: TextBoke[] = [
     setup: "今日の朝ごはん、寿司100貫食べてん。",
     examples: ["朝から食べすぎや！", "それ昼まで持つやろ！"],
     examplesTatoe: ["築地の早朝市場関係者か！", "回らない寿司屋の恐怖かお前は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -129,8 +102,6 @@ export const bokes: TextBoke[] = [
     setup: "信号待ってたら、赤・黄・青・紫って光っててん。",
     examples: ["紫の信号あるかい！", "故障しとるやろそれ！"],
     examplesTatoe: ["ファンシーショップの交通信号か！", "信号機業界の異端児か！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -138,8 +109,6 @@ export const bokes: TextBoke[] = [
     setup: "うちの嫁な、料理めっちゃ上手で、味噌汁に石入れてくるねん。",
     examples: ["それ上手ちゃうやろ！", "なんで石入れるねん！"],
     examplesTatoe: ["縄文時代の料理人か！", "工事現場の炊き出し係かお前は！"],
-    category: "family",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -147,8 +116,6 @@ export const bokes: TextBoke[] = [
     setup: "風呂入ろうとしたら、湯船にワニがおってん。一緒に入ったわ。",
     examples: ["入るな危ないわ！", "ワニはどっから来たんや！"],
     examplesTatoe: ["サファリパーク系温泉の客か！", "爬虫類専門スパかお前は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -156,8 +123,6 @@ export const bokes: TextBoke[] = [
     setup: "俺、昨日富士山登ってん。エレベーターで。",
     examples: ["富士山にエレベーターないわ！", "それ登ったって言わへんやろ！"],
     examplesTatoe: ["観光地のバリアフリー化担当か！", "怠け者の登山家かお前は！"],
-    category: "sports",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -165,8 +130,6 @@ export const bokes: TextBoke[] = [
     setup: "おかんがな、財布忘れて買い物行って、店ごと買って帰ってきてん。",
     examples: ["財布忘れたんちゃうんかい！", "店買えるおかんって何者やねん！"],
     examplesTatoe: ["デパート経営者の妻か！", "億万長者の主婦かお前の母は！"],
-    category: "family",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -174,8 +137,6 @@ export const bokes: TextBoke[] = [
     setup: "今日の天気予報、降水確率1000パーセントって言うてたわ。",
     examples: ["100超えとるやないか！", "そんな降ったら世界滅びるわ！"],
     examplesTatoe: ["ノアの方舟待望論者か！", "気象庁の新システム導入かお前は！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -183,8 +144,6 @@ export const bokes: TextBoke[] = [
     setup: "ペットに金魚飼ってるんやけど、最近散歩せがんでくるねん。",
     examples: ["金魚散歩できへんやろ！", "水なかったら死ぬわ！"],
     examplesTatoe: ["水族館の運動不足指導員か！", "金魚界のフィットネスブームかお前は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -192,8 +151,6 @@ export const bokes: TextBoke[] = [
     setup: "テスト勉強せんかったから、回答用紙に「許してください」って書いて出したら100点やってん。",
     examples: ["なんで100点やねん！", "先生甘すぎるやろ！"],
     examplesTatoe: ["泣き落とし作戦の成功例か！", "情に厚すぎる教師の愛弟子かお前は！"],
-    category: "school",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -201,8 +158,6 @@ export const bokes: TextBoke[] = [
     setup: "シャワー浴びてたらお湯じゃなくてラーメンが出てきてん。",
     examples: ["どんな配管しとんねん！", "風呂屋ちゃう、ラーメン屋やそれ！"],
     examplesTatoe: ["銭湯の裏メニューか！", "湯船がラーメン屋かお前の家は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -210,8 +165,6 @@ export const bokes: TextBoke[] = [
     setup: "朝起きたらな、身長が3メートルになっててん。",
     examples: ["どんな寝相やねん！", "ベッドからはみ出るやろ！"],
     examplesTatoe: ["バスケ界のスーパースター候補か！", "巨人化進行中の実験体かお前は！"],
-    category: "daily",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -219,8 +172,6 @@ export const bokes: TextBoke[] = [
     setup: "蝉取りに公園行ったら、カブトムシ100匹捕れてん。",
     examples: ["蝉どこいったんや！", "100匹は捕りすぎや！"],
     examplesTatoe: ["昆虫採集の神か！", "夏休みの自由研究のラスボスかお前は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -228,8 +179,6 @@ export const bokes: TextBoke[] = [
     setup: "学校行ったら、校長先生がランドセル背負っててん。",
     examples: ["新入生ちゃうやろ！", "校長何しとんねん！"],
     examplesTatoe: ["小学校デビューの再挑戦者か！", "管理職のノスタルジー暴発かお前は！"],
-    category: "school",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -237,8 +186,6 @@ export const bokes: TextBoke[] = [
     setup: "ピザ宅配頼んだら、運んできたバイクの兄ちゃんが俺やってん。",
     examples: ["お前が頼んだんやろ！", "二人おるんかい！"],
     examplesTatoe: ["自給自足の究極系か！", "ドッペルゲンガーのアルバイトかお前は！"],
-    category: "work",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -246,8 +193,6 @@ export const bokes: TextBoke[] = [
     setup: "自転車めっちゃ漕いでたら、空飛んでもうてん。",
     examples: ["E.T.かいな！", "そんな自転車売ってないわ！"],
     examplesTatoe: ["魔女の宅急便のキキか！", "ジブリ映画の主人公かお前は！"],
-    category: "travel",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -255,8 +200,6 @@ export const bokes: TextBoke[] = [
     setup: "デパートで買い物しとったら、店員さんが俺の母やってん。",
     examples: ["そら知っとるやろ！", "気づくの遅いわ！"],
     examplesTatoe: ["家族経営の百貨店か！", "親子丼の自己循環かお前は！"],
-    category: "family",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -264,8 +207,6 @@ export const bokes: TextBoke[] = [
     setup: "信号待ちしてたら、隣にゴジラ立っててん。挨拶してくれた。",
     examples: ["ゴジラ礼儀正しいな！", "もう怖がる必要ないやないか！"],
     examplesTatoe: ["怪獣界のマナー講師か！", "都会派ゴジラのデビュー戦かお前は！"],
-    category: "fantasy",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -273,8 +214,6 @@ export const bokes: TextBoke[] = [
     setup: "テレビつけたら俺が出ててん。記憶ないわ。",
     examples: ["二重生活しとるやろ！", "事務所入ったん覚えてないんかい！"],
     examplesTatoe: ["パラレルワールドの芸能人か！", "夢遊病の売れっ子俳優かお前は！"],
-    category: "daily",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -282,8 +221,6 @@ export const bokes: TextBoke[] = [
     setup: "海行ったら、砂浜が全部金やってん。持って帰ったわ。",
     examples: ["大金持ちやないか！", "それ砂浜ちゃうやろ！"],
     examplesTatoe: ["黄金郷の発見者か！", "砂金取りの伝説の勝者かお前は！"],
-    category: "money",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -291,8 +228,6 @@ export const bokes: TextBoke[] = [
     setup: "山登ったら頂上にコンビニあって、店員もおってん。",
     examples: ["どうやって通勤しとんねん！", "そんな山ないわ！"],
     examplesTatoe: ["登山者向けサービスの極みか！", "山岳特化型コンビニの店長かお前は！"],
-    category: "travel",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -300,8 +235,6 @@ export const bokes: TextBoke[] = [
     setup: "風邪ひいて病院行ったら、医者が「気合や！」しか言わへんかってん。",
     examples: ["医者ちゃうやろそれ！", "それ根性論や！"],
     examplesTatoe: ["体育会系の名医か！", "昭和の部活顧問かお前の主治医は！"],
-    category: "work",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -309,8 +242,6 @@ export const bokes: TextBoke[] = [
     setup: "レストランのメニュー見たら、全部1円やってん。",
     examples: ["店潰れるわ！", "なんかおかしいやろ警察呼ぼ！"],
     examplesTatoe: ["閉店セール最終日か！", "経営者の計算ミス記念日かお前は！"],
-    category: "money",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -318,8 +249,6 @@ export const bokes: TextBoke[] = [
     setup: "うちのおばあちゃんな、200歳やねん。",
     examples: ["長生きしすぎや！", "ギネス載るやろそれ！"],
     examplesTatoe: ["秘境の仙人か！", "日本記録保持者の超越者かお前の祖母は！"],
-    category: "family",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -327,8 +256,6 @@ export const bokes: TextBoke[] = [
     setup: "雨降ってきたから傘さしたら、傘の中からも雨降ってきてん。",
     examples: ["不良品やないか！", "意味ないやろそれ！"],
     examplesTatoe: ["傘の不正改造業者か！", "雨乞いの儀式の失敗例かお前は！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -336,8 +263,6 @@ export const bokes: TextBoke[] = [
     setup: "腹減って冷蔵庫開けたら、宇宙人入っててん。「こんにちは」って言われた。",
     examples: ["どっから入ったんや！", "宇宙人日本語しゃべるんかい！"],
     examplesTatoe: ["冷蔵庫保存の異星人か！", "宇宙旅行の中継地点かお前の家は！"],
-    category: "fantasy",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -345,8 +270,6 @@ export const bokes: TextBoke[] = [
     setup: "走ってたら、影が俺より先に行ってもうてん。",
     examples: ["影どんだけ速いねん！", "物理法則どないなっとんねん！"],
     examplesTatoe: ["影の独立運動か！", "本体より優秀な影の持ち主かお前は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -354,8 +277,6 @@ export const bokes: TextBoke[] = [
     setup: "友達の家行ったら、玄関がプールやってん。泳いで入った。",
     examples: ["どんな家やねん！", "靴脱ぐ場所ないやろ！"],
     examplesTatoe: ["リゾート風建築の極致か！", "水陸両用住宅の先駆者かお前の友達は！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -363,8 +284,6 @@ export const bokes: TextBoke[] = [
     setup: "美容院で「短くしてください」言うたら、髪じゃなくて身長短くされたわ。",
     examples: ["美容師ちゃうやろそれ！", "どないやって縮めたんや！"],
     examplesTatoe: ["伸縮自在の美容師か！", "物理法則を超えた理容室の店員かお前は！"],
-    category: "work",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -372,8 +291,6 @@ export const bokes: TextBoke[] = [
     setup: "ATMでお金おろそうとしたら、お金じゃなくてお菓子出てきてん。",
     examples: ["駄菓子屋かい！", "なんでお菓子出るねん！"],
     examplesTatoe: ["子供向け金融機関か！", "駄菓子屋銀行の支店かお前が行ったATMは！"],
-    category: "money",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -381,8 +298,6 @@ export const bokes: TextBoke[] = [
     setup: "鏡見たら、鏡の中の俺が手振ってきてん。俺は振ってない。",
     examples: ["怖いわ！", "それホラーやないか！"],
     examplesTatoe: ["パラレルユニバースの自分か！", "異次元からの来客かお前の鏡は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -390,8 +305,6 @@ export const bokes: TextBoke[] = [
     setup: "電車で寝てたら、終点で「お客さん、月ですよ」って起こされた。",
     examples: ["どこ走っとんねんその電車！", "JRの管轄外やろ！"],
     examplesTatoe: ["銀河鉄道999の乗客か！", "宇宙旅行のエコノミークラスかお前は！"],
-    category: "travel",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -399,8 +312,6 @@ export const bokes: TextBoke[] = [
     setup: "うちの弟な、生まれた時から30歳やってん。",
     examples: ["そんな新生児おるかい！", "おかんびっくりするわ！"],
     examplesTatoe: ["タイムトラベラーの家族か！", "老成しすぎた新生児かお前の弟は！"],
-    category: "family",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -408,8 +319,6 @@ export const bokes: TextBoke[] = [
     setup: "牛丼屋入って「並一つ」言うたら、新幹線の並席出てきてん。",
     examples: ["牛丼出せや！", "なんで席持ってくるねん！"],
     examplesTatoe: ["JR東日本の吉野家か！", "鉄道マニアの牛丼屋かお前の行った店は！"],
-    category: "food",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -417,8 +326,6 @@ export const bokes: TextBoke[] = [
     setup: "今日のおやつ、お母さんがケーキ焼いてくれてんけどな、コンクリートで作ってあったわ。",
     examples: ["建設業ちゃうねん！", "歯折れるやろ！"],
     examplesTatoe: ["建築業界とのコラボ商品か！", "石壁の味を極めたパティシエかお前の母は！"],
-    category: "family",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -426,8 +333,6 @@ export const bokes: TextBoke[] = [
     setup: "公園のベンチ座ったら、隣におった人が織田信長やってん。",
     examples: ["タイムスリップしとるやろ！", "本能寺の変どないなったんや！"],
     examplesTatoe: ["歴史上の人物との交流会か！", "戦国時代からの出張組かお前の隣は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -435,8 +340,6 @@ export const bokes: TextBoke[] = [
     setup: "ジムでベンチプレス100kg挙げてたら、トレーナーに「軽すぎるんで1トンにしましょう」って言われた。",
     examples: ["人間離れしすぎや！", "そんなプレート無いわ！"],
     examplesTatoe: ["鉄人28号の師匠か！", "人類進化の究極形態かお前のトレーナーは！"],
-    category: "sports",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -444,8 +347,6 @@ export const bokes: TextBoke[] = [
     setup: "コンビニで肉まん買おうとしたら、レジの店員が肉まんやってん。",
     examples: ["共食いやないか！", "店員人間ちゃうんかい！"],
     examplesTatoe: ["肉まん界のユニオン代表か！", "同族経営の極致かそのコンビニは！"],
-    category: "food",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -453,8 +354,6 @@ export const bokes: TextBoke[] = [
     setup: "天気予報見たら、明日の予報「ハム」って書いてあってん。",
     examples: ["天気ちゃうやろ！", "ハム降ってきても困るわ！"],
     examplesTatoe: ["食品業界の気象予報士か！", "冷蔵庫の天気予報かお前が見たのは！"],
-    category: "daily",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -462,8 +361,6 @@ export const bokes: TextBoke[] = [
     setup: "電車乗ろうとしたら、運転手が「今日はノリで行きます」って言うてホーム飛び出してん。",
     examples: ["ノリで運転すんな！", "命預けられへんわ！"],
     examplesTatoe: ["雰囲気重視の鉄道員か！", "ノリで生きてるJR職員かお前の乗った電車は！"],
-    category: "travel",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -471,8 +368,6 @@ export const bokes: TextBoke[] = [
     setup: "朝起きたら、布団がパスタになっててん。",
     examples: ["朝起きたらパスタは無理や！", "誰が茹でたんや！"],
     examplesTatoe: ["イタリアンレストランの寝室か！", "ペペロンチーノ専用ベッドかお前の布団は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -480,8 +375,6 @@ export const bokes: TextBoke[] = [
     setup: "美容院で髪切ってもらってたら、髪が話しかけてきてん。",
     examples: ["髪しゃべるかい！", "誰の念や！"],
     examplesTatoe: ["ホラー映画の主人公か！", "霊感美容師の客かお前は！"],
-    category: "work",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -489,8 +382,6 @@ export const bokes: TextBoke[] = [
     setup: "ジュース買いに自販機行ったら、お札が出てきてん。",
     examples: ["逆や逆！", "そんな自販機ないわ！"],
     examplesTatoe: ["銀行ATMの兄弟か！", "札束製造機かお前の駅前は！"],
-    category: "money",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -498,8 +389,6 @@ export const bokes: TextBoke[] = [
     setup: "公園のベンチに座ったら、ベンチに座られててん。",
     examples: ["どっちが座ったんやねん！", "意味分からんわ！"],
     examplesTatoe: ["逆転現象の被害者か！", "ベンチに支配される人類かお前は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -507,8 +396,6 @@ export const bokes: TextBoke[] = [
     setup: "鉛筆使おうと思って削ったら、中から肉が出てきてん。",
     examples: ["鉛筆に肉あるかい！", "焼き肉屋の鉛筆か！"],
     examplesTatoe: ["焼肉店専用の文房具か！", "ステーキの種かお前の鉛筆は！"],
-    category: "school",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -516,8 +403,6 @@ export const bokes: TextBoke[] = [
     setup: "パスタ茹でようと思ったら、鍋から猫が出てきてん。",
     examples: ["鍋から猫はあかんやろ！", "誰が入れたんや！"],
     examplesTatoe: ["ニャンコ風呂の住人か！", "茹で上がりを待つ猫かお前の鍋は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -525,8 +410,6 @@ export const bokes: TextBoke[] = [
     setup: "友達が遅刻してきて、理由が「太陽が眩しかった」やってん。",
     examples: ["太陽眩しいの当たり前や！", "言い訳になってないわ！"],
     examplesTatoe: ["太陽光発電の犠牲者か！", "サングラス売り場の住人かお前の友達は！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -534,8 +417,6 @@ export const bokes: TextBoke[] = [
     setup: "買い物カゴ持って家帰ったら、カゴの中で魚が泳いでてん。",
     examples: ["なんで生きてんねん！", "水族館か！"],
     examplesTatoe: ["移動式水族館の店員か！", "新鮮さアピールの極致かお前の買い物は！"],
-    category: "food",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -543,8 +424,6 @@ export const bokes: TextBoke[] = [
     setup: "病院の待合室で、隣の人がカエルやってん。",
     examples: ["カエル何科にかかるんや！", "両生類専門の病院か！"],
     examplesTatoe: ["動物病院の患者か！", "梅雨を待つ患者かお前の隣は！"],
-    category: "animal",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -552,8 +431,6 @@ export const bokes: TextBoke[] = [
     setup: "昨日Amazonで注文したのが、ドラム缶で届いてん。",
     examples: ["ドラム缶頼んでないわ！", "なんで届いてんねん！"],
     examplesTatoe: ["工事現場の通販か！", "石油業界の宅配サービスかお前のAmazonは！"],
-    category: "money",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -561,8 +438,6 @@ export const bokes: TextBoke[] = [
     setup: "朝の通勤電車で、隣の人が蕎麦すすってたわ。",
     examples: ["電車で蕎麦食うな！", "麺どこから出してきたんや！"],
     examplesTatoe: ["立ち食いそば屋の出張サービスか！", "通勤朝食の極致かお前の隣の客は！"],
-    category: "travel",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -570,8 +445,6 @@ export const bokes: TextBoke[] = [
     setup: "自分の部屋掃除してたら、知らない部屋が出てきてん。",
     examples: ["なんで部屋増えてんねん！", "それマンションごと買ったんか！"],
     examplesTatoe: ["四次元住宅の住人か！", "迷路の家主かお前は！"],
-    category: "daily",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -579,8 +452,6 @@ export const bokes: TextBoke[] = [
     setup: "居酒屋で生ビール頼んだら、ビールジョッキが二人前歩いてきた。",
     examples: ["ビールジョッキ歩くかい！", "誰が運んでんねん！"],
     examplesTatoe: ["ロボット居酒屋のメニュー商品か！", "AI店員のお運び役かお前のジョッキは！"],
-    category: "food",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -588,8 +459,6 @@ export const bokes: TextBoke[] = [
     setup: "友達の引っ越し手伝いに行ったら、家ごと持ち上げてた。",
     examples: ["家持ち上げるかい！", "怪力すぎや！"],
     examplesTatoe: ["スーパーマン引っ越し業者か！", "都市開発担当者かお前の友達は！"],
-    category: "family",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -597,8 +466,6 @@ export const bokes: TextBoke[] = [
     setup: "お風呂のお湯を抜いたら、海水になっててん。",
     examples: ["なんで塩水やねん！", "風呂で塩漬けされとるんか！"],
     examplesTatoe: ["温泉どころか海水浴場か！", "塩湖で生まれた人魚かお前は！"],
-    category: "daily",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -606,8 +473,6 @@ export const bokes: TextBoke[] = [
     setup: "図書館で勉強してたら、本が話し始めてん。",
     examples: ["本しゃべるかい！", "図書館うるさいやろ！"],
     examplesTatoe: ["音声認識図書館の最新機能か！", "文字界の革命家かお前の本は！"],
-    category: "school",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -615,8 +480,6 @@ export const bokes: TextBoke[] = [
     setup: "動物園のサル舎、サルじゃなくて社長が入っててん。",
     examples: ["人間入れたらあかん！", "なんでスーツ姿やねん！"],
     examplesTatoe: ["管理職特化動物園の目玉商品か！", "リストラ後の新人類かお前は！"],
-    category: "animal",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -624,8 +487,6 @@ export const bokes: TextBoke[] = [
     setup: "アイス食べてたら、口から雪が出てきてん。",
     examples: ["雪降らせる体質か！", "アイスどないなったんや！"],
     examplesTatoe: ["雪国出身の食べ物か！", "アイスマシーン搭載の人類かお前は！"],
-    category: "food",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -633,8 +494,6 @@ export const bokes: TextBoke[] = [
     setup: "信号無視して走ってきた車、運転手がペンギンやってん。",
     examples: ["ペンギン運転すんな！", "免許持ってんのか！"],
     examplesTatoe: ["南極からの留学生か！", "鳥類最初のドライバーかお前は！"],
-    category: "travel",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -642,8 +501,6 @@ export const bokes: TextBoke[] = [
     setup: "雨降り出したから走って帰ったら、家がなかったわ。",
     examples: ["家どこいったんや！", "誰が持ってったんやねん！"],
     examplesTatoe: ["地面に飲み込まれた住宅か！", "引っ越しエスパーの被害者かお前は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -651,8 +508,6 @@ export const bokes: TextBoke[] = [
     setup: "日記つけようとしたら、明日の出来事が書かれててん。",
     examples: ["未来見える日記か！", "怖いわ！"],
     examplesTatoe: ["タイムマシン搭載の文房具か！", "予言者の書斎用品かお前の日記は！"],
-    category: "fantasy",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -660,8 +515,6 @@ export const bokes: TextBoke[] = [
     setup: "朝食のトースト、ジャム塗ろうとしたらトーストから返事してきた。",
     examples: ["トーストしゃべるかい！", "塗ったらあかん雰囲気やろ！"],
     examplesTatoe: ["AIパン製造の革命か！", "意思持ったベーカリーかお前のキッチンは！"],
-    category: "food",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -669,8 +522,6 @@ export const bokes: TextBoke[] = [
     setup: "体育の授業でハードル跳んだら、ハードルも跳んだ。",
     examples: ["ハードルが跳ぶかい！", "誰が跳ばしたんや！"],
     examplesTatoe: ["生命を持つ運動器具か！", "ジャンプ大会の出場選手かお前のハードルは！"],
-    category: "sports",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -678,8 +529,6 @@ export const bokes: TextBoke[] = [
     setup: "夜中にトイレ起きたら、便器がコーヒーカップになっててん。",
     examples: ["コーヒーカップで用足せるか！", "誰がすり替えたんや！"],
     examplesTatoe: ["カフェの裏メニューか！", "用足し用カフェの新業態かお前のトイレは！"],
-    category: "daily",
-    difficulty: "easy",
   },
   {
     kind: "text",
@@ -687,8 +536,6 @@ export const bokes: TextBoke[] = [
     setup: "ペットショップで犬買ったら、犬じゃなくて狼やってん。",
     examples: ["全然違う動物やろ！", "ペットショップ訴えるぞ！"],
     examplesTatoe: ["野生取り扱い専門店か！", "シベリアからの密輸かお前のペットショップは！"],
-    category: "animal",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -696,8 +543,6 @@ export const bokes: TextBoke[] = [
     setup: "ラジオ体操行ったら、参加者全員が松岡修造やってん。",
     examples: ["熱すぎるラジオ体操や！", "暑苦しすぎるやろ！"],
     examplesTatoe: ["太陽神の集会か！", "テニス界の伝説の集会かお前のラジオ体操は！"],
-    category: "sports",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -705,8 +550,6 @@ export const bokes: TextBoke[] = [
     setup: "銀行員に「手数料払ってください」言われて、払ったら銀行員が踊り出した。",
     examples: ["なんで踊んねん！", "手数料そんな嬉しいか！"],
     examplesTatoe: ["ダンスホール銀行の店員か！", "ボーナス時期の踊り狂う行員かお前は！"],
-    category: "money",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -714,8 +557,6 @@ export const bokes: TextBoke[] = [
     setup: "結婚式に呼ばれて行ったら、新郎新婦が双子やってん。",
     examples: ["双子で結婚すんな！", "倫理的に問題やろ！"],
     examplesTatoe: ["双子業界の革命的イベントか！", "DNA解析必須の結婚式かお前の友達は！"],
-    category: "family",
-    difficulty: "hard",
   },
   {
     kind: "text",
@@ -723,8 +564,6 @@ export const bokes: TextBoke[] = [
     setup: "朝のランニング中、犬を連れたおじさんに追い抜かれてん。100km/hで。",
     examples: ["人間離れしすぎや！", "犬どないなっとんねん！"],
     examplesTatoe: ["走る家族の超能力者か！", "新幹線並みの早朝散歩かお前は！"],
-    category: "sports",
-    difficulty: "medium",
   },
   {
     kind: "text",
@@ -732,7 +571,355 @@ export const bokes: TextBoke[] = [
     setup: "子供の頃、サンタクロースが来たんよ。そして、まだ帰ってない。",
     examples: ["居座り続けるサンタなんか嫌や！", "プレゼント置いて帰れ！"],
     examplesTatoe: ["長期滞在型の北欧観光客か！", "クリスマス専門ホテルの客かお前の家は！"],
-    category: "fantasy",
-    difficulty: "hard",
+  },
+  {
+    kind: "text",
+    id: 81,
+    setup: "朝起きてカーテン開けたら、外が映画のセットやってん。",
+    examples: ["どこ住んどんねん！", "監督どこおるねん！"],
+    examplesTatoe: ["ハリウッド進出した街か！", "撮影現場真っ只中の住人かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 82,
+    setup: "ガソリンスタンド入ったら、ガソリンじゃなくてオレンジジュース入れられた。",
+    examples: ["車動かんやろ！", "ジュースちゃうねん！"],
+    examplesTatoe: ["ファミレスのドリンクバーか！", "ジューススタンドの新業態かお前のガソスタは！"],
+  },
+  {
+    kind: "text",
+    id: 83,
+    setup: "お年玉袋開けたら、中から紙吹雪が出てきた。",
+    examples: ["お祝いが過剰やねん！", "金入れろや！"],
+    examplesTatoe: ["パーティー会場の演出担当か！", "派手好きな親戚かお前のおじいちゃんは！"],
+  },
+  {
+    kind: "text",
+    id: 84,
+    setup: "玄関のチャイム鳴ったから出たら、宅配便がピザ50枚やった。",
+    examples: ["頼んでないわ！", "誰が食うねん50枚！"],
+    examplesTatoe: ["パーティー業者の特売日か！", "ピザ屋の在庫処分かお前の玄関は！"],
+  },
+  {
+    kind: "text",
+    id: 85,
+    setup: "うちの猫な、最近二足歩行覚えてん。スーツも着とる。",
+    examples: ["猫人間化しすぎや！", "出社する気か！"],
+    examplesTatoe: ["猫界のサラリーマンか！", "進化しすぎたペットかお前の猫は！"],
+  },
+  {
+    kind: "text",
+    id: 86,
+    setup: "銭湯入ろうとしたら、男湯に入った瞬間カエルだらけやった。",
+    examples: ["人類どこいったんや！", "両生類専用ちゃうやろ！"],
+    examplesTatoe: ["合鴨農法の温泉版か！", "カエル天国の入浴施設かお前の銭湯は！"],
+  },
+  {
+    kind: "text",
+    id: 87,
+    setup: "コインランドリーに服入れたら、洋服が別人のサイズで出てきた。",
+    examples: ["違う人になっとるやないか！", "全然違うサイズや！"],
+    examplesTatoe: ["変身ランドリーの被害者か！", "他人とのすり替え工房かお前の服は！"],
+  },
+  {
+    kind: "text",
+    id: 88,
+    setup: "駅前で迷子の子に道聞かれたから教えたら、子どもがおっちゃんやった。",
+    examples: ["子どもちゃうやろ！", "見た目で騙すな！"],
+    examplesTatoe: ["演劇界の名子役か！", "中年の童顔詐欺師かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 89,
+    setup: "ピアノ習い始めたんやけど、先生が鍵盤の中におる。",
+    examples: ["先生どこから出てきたんや！", "鍵盤割れるやろ！"],
+    examplesTatoe: ["ピアノに住み込む音楽家か！", "楽器の中の精霊かお前の先生は！"],
+  },
+  {
+    kind: "text",
+    id: 90,
+    setup: "銀行員に「あなたの貯金、宇宙にあります」って言われた。",
+    examples: ["どないやって引き出すねん！", "現金化できるんかい！"],
+    examplesTatoe: ["銀河系融資の取引先か！", "NASA公認の金融機関かお前の銀行は！"],
+  },
+  {
+    kind: "text",
+    id: 91,
+    setup: "ラーメン頼んだら、店員が出汁の中から出てきてん。",
+    examples: ["店員どっから来たんや！", "出汁汚いわ！"],
+    examplesTatoe: ["温泉ラーメンの新サービスか！", "出汁に住み込む若手バイトかお前は！"],
+  },
+  {
+    kind: "text",
+    id: 92,
+    setup: "寝てたら布団が話しかけてきて「おはよう」って起こされた。",
+    examples: ["布団しゃべるかい！", "目覚まし機能か！"],
+    examplesTatoe: ["AI 寝具の最新モデルか！", "布団界の朝型布団かお前の寝具は！"],
+  },
+  {
+    kind: "text",
+    id: 93,
+    setup: "お祭りの屋台で焼きそば買ったら、麺が生きとった。",
+    examples: ["生きとる麺食えるかい！", "縁日に何売っとんねん！"],
+    examplesTatoe: ["生体実験の屋台か！", "夏祭り限定のホラーフードかお前の焼きそばは！"],
+  },
+  {
+    kind: "text",
+    id: 94,
+    setup: "お墓参り行ったら、墓石に Wi-Fi 設置されとった。",
+    examples: ["なんで Wi-Fi あんねん！", "ご先祖がネット使うんか！"],
+    examplesTatoe: ["IT 化進んだ墓地か！", "リモートご先祖さまの通信設備かお前の墓は！"],
+  },
+  {
+    kind: "text",
+    id: 95,
+    setup: "ジャムパン食べたら、中身が血液型 B 型って書いてあってん。",
+    examples: ["血液型表示するな！", "ジャム入っとらんやないか！"],
+    examplesTatoe: ["血液検査キット内蔵のパンか！", "性格診断付きベーカリーかお前のジャムパンは！"],
+  },
+  {
+    kind: "text",
+    id: 96,
+    setup: "飼い犬の散歩中、犬に首輪付けたら俺がリード持って引っ張られとった。",
+    examples: ["立場逆転しとるやないか！", "誰が散歩しとんねん！"],
+    examplesTatoe: ["主従逆転の散歩か！", "犬界の支配者かお前の犬は！"],
+  },
+  {
+    kind: "text",
+    id: 97,
+    setup: "テスト受けたら、問題用紙に「ようこそ」しか書いてなかった。",
+    examples: ["問題ないんかい！", "歓迎されとる場合か！"],
+    examplesTatoe: ["観光地の入場テストか！", "おもてなし重視の試験官かお前の先生は！"],
+  },
+  {
+    kind: "text",
+    id: 98,
+    setup: "プールで泳いでたら、水じゃなくてゼリーやった。",
+    examples: ["ゼリープールあるかい！", "進めへんやろ！"],
+    examplesTatoe: ["スイーツ系アスレチックか！", "デザートで泳ぐ人類かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 99,
+    setup: "ハイキング行ったら、山頂で誕生パーティーが開かれとった。",
+    examples: ["山頂で何しとんねん！", "ケーキどこから持ってきたんや！"],
+    examplesTatoe: ["登山系イベント会社の主催か！", "標高 3000m の祝賀会かお前のハイキングは！"],
+  },
+  {
+    kind: "text",
+    id: 100,
+    setup: "蛇口ひねったら、水じゃなくてビールが出てきた。",
+    examples: ["飲み会開けるやないか！", "酔うわ手洗いだけで！"],
+    examplesTatoe: ["居酒屋直結の水道か！", "ビアガーデン仕様の家かお前の蛇口は！"],
+  },
+  {
+    kind: "text",
+    id: 101,
+    setup: "うちの父な、毎朝3時から3時間ずっと正座しとんねん。",
+    examples: ["足しびれるやろ！", "何の修行や！"],
+    examplesTatoe: ["朝活界の禅僧か！", "膝壊し選手権の代表かお前の父は！"],
+  },
+  {
+    kind: "text",
+    id: 102,
+    setup: "お弁当箱開けたら、米一粒だけ入っとった。",
+    examples: ["少なすぎや！", "ダイエットにもならんわ！"],
+    examplesTatoe: ["ミニマリストの極致か！", "米一粒勝負の精神論かお前の弁当は！"],
+  },
+  {
+    kind: "text",
+    id: 103,
+    setup: "寝坊して走って学校行ったら、学校が引っ越しとった。",
+    examples: ["学校引っ越すかい！", "どこ行ったんやねん！"],
+    examplesTatoe: ["移動式教育機関か！", "校舎ごと逃亡する学校かお前の母校は！"],
+  },
+  {
+    kind: "text",
+    id: 104,
+    setup: "床屋で「カット」言うたら、ハサミじゃなくてチェーンソー出してきた。",
+    examples: ["首飛ぶわ！", "森林伐採か！"],
+    examplesTatoe: ["建築業兼任の理容師か！", "木こりに転職した床屋の店主かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 105,
+    setup: "道路工事してる横通ったら、現場監督がアフロやった。",
+    examples: ["ヘルメットかぶれや！", "アフロから出っ張っとるやないか！"],
+    examplesTatoe: ["昭和フォークの作業員か！", "70年代ファッションの現場担当かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 106,
+    setup: "居酒屋でハイボール頼んだら、グラスにしか入っとらん。",
+    examples: ["それで普通や！", "中身入っとるやろ！"],
+    examplesTatoe: ["飲食店の最低基準か！", "クレーマー予備軍かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 107,
+    setup: "風呂上がりに体重計乗ったら、メーター 1 トン超えとった。",
+    examples: ["人間の重さちゃうわ！", "体重計壊れとるやろ！"],
+    examplesTatoe: ["ゾウさん級の入浴客か！", "ジムでベンチプレスされる人間かお前は！"],
+  },
+  {
+    kind: "text",
+    id: 108,
+    setup: "朝食でトーストかじったら、中から手紙が出てきた。",
+    examples: ["パンに手紙仕込むな！", "誰からの手紙やねん！"],
+    examplesTatoe: ["ベーカリーの郵便配達か！", "焼き立てのラブレターかお前の朝食は！"],
+  },
+  {
+    kind: "text",
+    id: 109,
+    setup: "友達の誕生日プレゼント買ったら、店員が無料で包装してくれて、しかもお金くれた。",
+    examples: ["店潰れるわ！", "なんでお金もらえんねん！"],
+    examplesTatoe: ["逆経営の店舗か！", "資本主義に反逆する小売店かお前の行った店は！"],
+  },
+  {
+    kind: "text",
+    id: 110,
+    setup: "レンタカー借りたら、車じゃなくて馬やった。",
+    examples: ["馬借りる人おらんやろ！", "返却時のガソリンどないすんねん！"],
+    examplesTatoe: ["時代劇仕様のレンタル業か！", "戦国大名向けの店舗かお前のレンタカーは！"],
+  },
+  {
+    kind: "text",
+    id: 111,
+    setup: "病院行ったら、待合室で患者全員が踊っとった。",
+    examples: ["病院で踊るな！", "元気そうやないか！"],
+    examplesTatoe: ["治療法ダンスの病院か！", "ミュージカル仕様の医療機関かお前の通院先は！"],
+  },
+  {
+    kind: "text",
+    id: 112,
+    setup: "パン屋で食パン買ったら、レジで店員が「いくらですか？」って聞いてきた。",
+    examples: ["こっちが聞きたいわ！", "値札つけろや！"],
+    examplesTatoe: ["価格交渉制のパン屋か！", "信頼経済の信奉者かお前の店員は！"],
+  },
+  {
+    kind: "text",
+    id: 113,
+    setup: "自販機にコイン入れたら、ボタンじゃなくて店主が「何にしますか？」って降りてきた。",
+    examples: ["人間入っとるんかい！", "電気代もっと使えや！"],
+    examplesTatoe: ["手作業派の自販機か！", "中の人がいる接客特化型かお前の自販機は！"],
+  },
+  {
+    kind: "text",
+    id: 114,
+    setup: "雨が降ってきたから走ったら、雨も走り出した。",
+    examples: ["雨追いかけてくるかい！", "それただ濡れるやろ！"],
+    examplesTatoe: ["足の早い天気現象か！", "ストーカー気質の降水かお前を狙う雨は！"],
+  },
+  {
+    kind: "text",
+    id: 115,
+    setup: "ポテチ袋開けたら、中身がイモ畑の写真集やった。",
+    examples: ["原料見せられても困るわ！", "食べる気失せるやろ！"],
+    examplesTatoe: ["透明性アピールの極致か！", "農業界の写真集発行元かお前のポテチは！"],
+  },
+  {
+    kind: "text",
+    id: 116,
+    setup: "友達と花火やってたら、花火が一緒に話し始めた。",
+    examples: ["花火しゃべるかい！", "うるさい花火やな！"],
+    examplesTatoe: ["AI 搭載の打ち上げ花火か！", "おしゃべり爆竹かお前の花火は！"],
+  },
+  {
+    kind: "text",
+    id: 117,
+    setup: "体育祭の徒競走で走ってたら、ゴールテープが逃げ出した。",
+    examples: ["ゴール逃げるな！", "永遠に走らされるやないか！"],
+    examplesTatoe: ["逃避型の運動会か！", "選手と勝負するゴールテープかお前は！"],
+  },
+  {
+    kind: "text",
+    id: 118,
+    setup: "朝の電車、乗ろうとしたら扉が「すいません満席です」って言うて閉まった。",
+    examples: ["電車丁寧すぎや！", "乗せろや！"],
+    examplesTatoe: ["接客レベル高すぎる JR か！", "高級ホテル並みの鉄道かお前の電車は！"],
+  },
+  {
+    kind: "text",
+    id: 119,
+    setup: "図書館で本借りたら、最後のページに「明日返してください」って書いてあった。",
+    examples: ["短すぎる貸出期間や！", "意味ないやろ！"],
+    examplesTatoe: ["即日返却制の図書館か！", "返却サイクルが鬼の司書かお前の図書館は！"],
+  },
+  {
+    kind: "text",
+    id: 120,
+    setup: "塾の自習室で集中しとったら、机がひとりでに動き出した。",
+    examples: ["机動くかい！", "勉強できへんやないか！"],
+    examplesTatoe: ["心霊現象の発生地か！", "オカルト系教育施設かお前の塾は！"],
+  },
+  {
+    kind: "text",
+    id: 121,
+    setup: "ピザ食べてたら、トッピングが全員手を振り始めた。",
+    examples: ["トッピング手ないやろ！", "食えなくなるやないか！"],
+    examplesTatoe: ["食材界のアイドルか！", "ファンサービス精神旺盛なピザかお前のディナーは！"],
+  },
+  {
+    kind: "text",
+    id: 122,
+    setup: "朝のラジオ体操、参加したら全員逆向きやった。",
+    examples: ["逆ラジオ体操するな！", "肩抜けるやろ！"],
+    examplesTatoe: ["反逆精神の朝活集団か！", "右と左を間違えた集団かお前の地区は！"],
+  },
+  {
+    kind: "text",
+    id: 123,
+    setup: "引っ越しの片付けしてたら、ダンボールから子犬が出てきた。",
+    examples: ["子犬入っとるかい！", "誰が梱包したんや！"],
+    examplesTatoe: ["動物専門の引越し業者か！", "ペット付き荷物のサプライズかお前のダンボールは！"],
+  },
+  {
+    kind: "text",
+    id: 124,
+    setup: "ATM で残高見たら「無限」って表示されとった。",
+    examples: ["数字書け数字！", "使い切れへんやろ！"],
+    examplesTatoe: ["銀行界の哲学者か！", "数学を超越した残高かお前の口座は！"],
+  },
+  {
+    kind: "text",
+    id: 125,
+    setup: "ホテルにチェックインしたら、部屋の鍵がパンの形やった。",
+    examples: ["パンで鍵あけるかい！", "鳥に食べられるやろ！"],
+    examplesTatoe: ["ベーカリー併設のホテルか！", "食べ物兼用のセキュリティかお前の宿は！"],
+  },
+  {
+    kind: "text",
+    id: 126,
+    setup: "ジムでトレーニング中、隣のマシンが拍手してきた。",
+    examples: ["マシン手ないやろ！", "応援されても怖いわ！"],
+    examplesTatoe: ["AI トレーナーの最新機能か！", "観客付きのフィットネス機器かお前のジムは！"],
+  },
+  {
+    kind: "text",
+    id: 127,
+    setup: "自分が運転してた車のミラーに、別人映っとった。",
+    examples: ["怖すぎや！", "誰が運転しとんねん！"],
+    examplesTatoe: ["ホラー映画の予告編か！", "心霊スポットを走る車かお前の運転は！"],
+  },
+  {
+    kind: "text",
+    id: 128,
+    setup: "山の中歩いてたら、看板に「ここから先、現実」って書いてあった。",
+    examples: ["今までは現実ちゃうんかい！", "怖い看板やな！"],
+    examplesTatoe: ["哲学者の設置した道標か！", "夢の世界の境界線かお前のハイキングコースは！"],
+  },
+  {
+    kind: "text",
+    id: 129,
+    setup: "友達の家泊まりに行ったら、布団が氷でできとった。",
+    examples: ["寒すぎて寝られへんわ！", "凍死するで！"],
+    examplesTatoe: ["北極基地の宿泊施設か！", "冷凍睡眠の被験者かお前の友達は！"],
+  },
+  {
+    kind: "text",
+    id: 130,
+    setup: "朝5時に目覚まし鳴って起きたら、目覚ましが「もう一度寝ろ」って言うてきた。",
+    examples: ["役割放棄しとるやないか！", "それで起こせや！"],
+    examplesTatoe: ["甘やかし系AIか！", "二度寝推奨の目覚ましかお前の枕元は！"],
   },
 ];

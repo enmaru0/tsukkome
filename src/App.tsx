@@ -1,14 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { bokes, type AnyBoke } from "./data/bokes";
-import {
-  CATEGORIES,
-  DIFFICULTIES,
-  categoryLabel,
-  difficultyLabel,
-  type BokeCategory,
-  type BokeDifficulty,
-} from "./data/categories";
 import { imageBokes } from "./data/imageBokes";
 import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
@@ -37,50 +29,6 @@ const TIME_LIMIT = 30;
 const SITE_URL = "https://tsukkome.vercel.app/";
 const HASHTAG = "ツッコめッ";
 
-type FilterableBoke = {
-  id: number;
-  category: BokeCategory;
-  difficulty: BokeDifficulty;
-};
-
-type Filters = {
-  category: BokeCategory | "all";
-  difficulty: BokeDifficulty | "all";
-};
-
-const FILTERS_KEY = "tsukkome:filters";
-
-const loadFilters = (): Filters => {
-  if (typeof window === "undefined") return { category: "all", difficulty: "all" };
-  try {
-    const raw = window.localStorage.getItem(FILTERS_KEY);
-    if (!raw) return { category: "all", difficulty: "all" };
-    const parsed = JSON.parse(raw);
-    return {
-      category: parsed.category ?? "all",
-      difficulty: parsed.difficulty ?? "all",
-    };
-  } catch {
-    return { category: "all", difficulty: "all" };
-  }
-};
-
-const saveFilters = (f: Filters) => {
-  try {
-    window.localStorage.setItem(FILTERS_KEY, JSON.stringify(f));
-  } catch {
-    // ignore
-  }
-};
-
-const applyFilters = <T extends FilterableBoke>(list: T[], f: Filters): T[] => {
-  return list.filter(
-    (b) =>
-      (f.category === "all" || b.category === f.category) &&
-      (f.difficulty === "all" || b.difficulty === f.difficulty),
-  );
-};
-
 const pickRandom = <T extends { id: number }>(list: T[], excludeId?: number): T => {
   if (list.length === 0) throw new Error("empty list");
   if (list.length === 1) return list[0];
@@ -89,19 +37,6 @@ const pickRandom = <T extends { id: number }>(list: T[], excludeId?: number): T 
     next = list[Math.floor(Math.random() * list.length)];
   }
   return next;
-};
-
-const pickFiltered = <T extends FilterableBoke>(
-  list: T[],
-  filters: Filters,
-  excludeId?: number,
-): T => {
-  const filtered = applyFilters(list, filters);
-  if (filtered.length === 0) {
-    // fall back to whole list if filter yields nothing
-    return pickRandom(list, excludeId);
-  }
-  return pickRandom(filtered, excludeId);
 };
 
 const bokeToSetupText = (boke: AnyBoke): string =>
@@ -178,20 +113,6 @@ function App() {
     pickRandom(bokes),
   );
   const [historyLoaded, setHistoryLoaded] = useState(false);
-  const [filters, setFiltersState] = useState<Filters>(() => loadFilters());
-
-  const setFilters = (f: Filters) => {
-    setFiltersState(f);
-    saveFilters(f);
-  };
-
-  const filteredCounts = useMemo(
-    () => ({
-      text: applyFilters(bokes, filters).length,
-      image: applyFilters(imageBokes, filters).length,
-    }),
-    [filters],
-  );
   const [mode, setMode] = useState<InputMode>("voice");
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
@@ -306,9 +227,7 @@ function App() {
 
   const startMode = (next: "text" | "image") => {
     const initialBoke =
-      next === "text"
-        ? pickFiltered(bokes, filters)
-        : pickFiltered(imageBokes, filters);
+      next === "text" ? pickRandom(bokes) : pickRandom(imageBokes);
     setCurrentBoke(initialBoke);
     setShowExamples(false);
     setLastSubmission(null);
@@ -377,8 +296,8 @@ function App() {
     recorder.cancel();
     setCurrentBoke((prev) =>
       phase === "image"
-        ? pickFiltered(imageBokes, filters, prev.id)
-        : pickFiltered(bokes, filters, prev.id),
+        ? pickRandom(imageBokes, prev.id)
+        : pickRandom(bokes, prev.id),
     );
     setText("");
     speech.reset();
@@ -486,90 +405,24 @@ function App() {
               type="button"
               className="start-button text-mode"
               onClick={() => startMode("text")}
-              disabled={filteredCounts.text === 0}
-              title={
-                filteredCounts.text === 0
-                  ? "現在のフィルタに該当するお題がありません"
-                  : ""
-              }
             >
               <div className="start-button-emoji">💬</div>
               <div className="start-button-title">通常モード</div>
               <div className="start-button-desc">
-                文字のお題にツッコむ（{filteredCounts.text}）
+                文字のお題にツッコむ（{bokes.length}問）
               </div>
             </button>
             <button
               type="button"
               className="start-button image-mode"
               onClick={() => startMode("image")}
-              disabled={filteredCounts.image === 0}
-              title={
-                filteredCounts.image === 0
-                  ? "現在のフィルタに該当するお題がありません"
-                  : ""
-              }
             >
               <div className="start-button-emoji">📷</div>
               <div className="start-button-title">画像モード</div>
               <div className="start-button-desc">
-                絵のお題にツッコむ（{filteredCounts.image}）
+                絵のお題にツッコむ（{imageBokes.length}問）
               </div>
             </button>
-          </div>
-
-          <div className="filter-panel">
-            <div className="filter-row">
-              <label htmlFor="f-difficulty">難易度</label>
-              <select
-                id="f-difficulty"
-                value={filters.difficulty}
-                onChange={(e) =>
-                  setFilters({
-                    ...filters,
-                    difficulty: e.target.value as BokeDifficulty | "all",
-                  })
-                }
-              >
-                <option value="all">全て</option>
-                {DIFFICULTIES.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="filter-row">
-              <label htmlFor="f-category">カテゴリ</label>
-              <select
-                id="f-category"
-                value={filters.category}
-                onChange={(e) =>
-                  setFilters({
-                    ...filters,
-                    category: e.target.value as BokeCategory | "all",
-                  })
-                }
-              >
-                <option value="all">全て</option>
-                {CATEGORIES.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.emoji} {c.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {(filters.category !== "all" || filters.difficulty !== "all") && (
-              <button
-                type="button"
-                className="filter-reset"
-                onClick={() =>
-                  setFilters({ category: "all", difficulty: "all" })
-                }
-              >
-                フィルタをクリア
-              </button>
-            )}
           </div>
 
           <p className="start-note">
@@ -621,14 +474,6 @@ function App() {
                     : "準備中"}
             </span>
           </div>
-          <div className="boke-tags">
-            <span className={`tag difficulty d-${currentBoke.difficulty}`}>
-              {difficultyLabel(currentBoke.difficulty)}
-            </span>
-            <span className="tag category">
-              {categoryLabel(currentBoke.category)}
-            </span>
-          </div>
           <div className="boke-bubble">
             <p className="boke-setup">{currentBoke.setup}</p>
           </div>
@@ -664,14 +509,6 @@ function App() {
                   : timeLeft === 0
                     ? "💥 時間切れ！"
                     : "準備中"}
-            </span>
-          </div>
-          <div className="boke-tags">
-            <span className={`tag difficulty d-${currentBoke.difficulty}`}>
-              {difficultyLabel(currentBoke.difficulty)}
-            </span>
-            <span className="tag category">
-              {categoryLabel(currentBoke.category)}
             </span>
           </div>
           <div className="image-frame">
