@@ -1,5 +1,6 @@
 import type { AnyBoke } from "../data/bokes";
 import type { InputMode } from "../types";
+import type { ScoreCard } from "./scoring";
 
 const DB_NAME = "tsukkome";
 const DB_VERSION = 1;
@@ -30,6 +31,7 @@ export type StoredEntry = {
   mode: InputMode;
   audioBlob: Blob | null;
   audioMime: string | null;
+  scoreCard: ScoreCard | null;
 };
 
 export const saveEntry = async (entry: StoredEntry): Promise<void> => {

@@ -7,6 +7,7 @@ import { useSpeechRecognition } from "./hooks/useSpeechRecognition";
 import { useSpeechSynthesis } from "./hooks/useSpeechSynthesis";
 import type { InputMode } from "./types";
 import { generateVideo, isVideoSupported } from "./utils/generateVideo";
+import { computeScoreCard, stars, type ScoreCard } from "./utils/scoring";
 import {
   loadAllEntries,
   saveEntry,
@@ -23,11 +24,37 @@ type HistoryEntry = {
   audioMime: string | null;
   audioBlob: Blob | null;
   timestamp: number;
+  scoreCard: ScoreCard | null;
 };
 
 const TIME_LIMIT = 30;
 const SITE_URL = "https://tsukkome.vercel.app/";
 const HASHTAG = "ツッコめッ";
+
+const getBlobAudioDuration = (blob: Blob): Promise<number> => {
+  return new Promise((resolve) => {
+    const audio = document.createElement("audio");
+    audio.preload = "metadata";
+    const url = URL.createObjectURL(blob);
+    const cleanup = () => {
+      audio.removeEventListener("loadedmetadata", onMeta);
+      audio.removeEventListener("error", onErr);
+      URL.revokeObjectURL(url);
+    };
+    const onMeta = () => {
+      const d = Number.isFinite(audio.duration) ? audio.duration : 0;
+      cleanup();
+      resolve(d * 1000);
+    };
+    const onErr = () => {
+      cleanup();
+      resolve(0);
+    };
+    audio.addEventListener("loadedmetadata", onMeta);
+    audio.addEventListener("error", onErr);
+    audio.src = url;
+  });
+};
 
 const pickRandom = <T extends { id: number }>(list: T[], excludeId?: number): T => {
   if (list.length === 0) throw new Error("empty list");
@@ -113,6 +140,8 @@ function App() {
     pickRandom(bokes),
   );
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const bokeReadyAtRef = useRef<number | null>(null);
+  const firstResponseAtRef = useRef<number | null>(null);
   const [mode, setMode] = useState<InputMode>("voice");
   const [text, setText] = useState("");
   const [showExamples, setShowExamples] = useState(false);
@@ -150,6 +179,7 @@ function App() {
         audioMime: s.audioMime,
         audioUrl: s.audioBlob ? URL.createObjectURL(s.audioBlob) : null,
         timestamp: s.timestamp,
+        scoreCard: s.scoreCard ?? null,
       }));
       setHistory(entries);
       setHistoryLoaded(true);
@@ -162,6 +192,8 @@ function App() {
   const startTimer = () => {
     setTimeLeft(TIME_LIMIT);
     setTimerRunning(true);
+    bokeReadyAtRef.current = Date.now();
+    firstResponseAtRef.current = null;
   };
 
   const bokeKey = `${currentBoke.kind}:${currentBoke.id}`;
@@ -225,6 +257,13 @@ function App() {
 
   const currentInput = mode === "text" ? text : voiceText;
 
+  useEffect(() => {
+    if (firstResponseAtRef.current !== null) return;
+    if (bokeReadyAtRef.current === null) return;
+    if (currentInput.trim().length === 0) return;
+    firstResponseAtRef.current = Date.now();
+  }, [currentInput]);
+
   const startMode = (next: "text" | "image") => {
     const initialBoke =
       next === "text" ? pickRandom(bokes) : pickRandom(imageBokes);
@@ -252,6 +291,8 @@ function App() {
     const value = currentInput.trim();
     if (!value) return;
 
+    const submittedAt = Date.now();
+
     let audioUrl: string | null = null;
     let audioMime: string | null = null;
     let audioBlob: Blob | null = null;
@@ -265,7 +306,28 @@ function App() {
       }
     }
 
-    const timestamp = Date.now();
+    const bokeReadyAt = bokeReadyAtRef.current ?? submittedAt;
+    const firstResponseAt = firstResponseAtRef.current ?? submittedAt;
+    const reactionMs = Math.max(0, firstResponseAt - bokeReadyAt);
+    const completionMs = Math.max(0, submittedAt - bokeReadyAt);
+
+    let speakingMs: number;
+    if (audioBlob) {
+      const dur = await getBlobAudioDuration(audioBlob);
+      speakingMs = dur > 0 ? dur : Math.max(submittedAt - firstResponseAt, 100);
+    } else {
+      speakingMs = Math.max(submittedAt - firstResponseAt, 100);
+    }
+
+    const scoreCard = computeScoreCard({
+      tsukkomi: value,
+      boke: currentBoke,
+      reactionMs,
+      completionMs,
+      speakingMs,
+      hasAudio: !!audioBlob,
+    });
+
     const entry: HistoryEntry = {
       boke: currentBoke,
       tsukkomi: value,
@@ -273,7 +335,8 @@ function App() {
       audioUrl,
       audioMime,
       audioBlob,
-      timestamp,
+      timestamp: submittedAt,
+      scoreCard,
     };
     setHistory((prev) => [entry, ...prev]);
     setLastSubmission(entry);
@@ -281,12 +344,13 @@ function App() {
     setTimerRunning(false);
 
     void saveEntry({
-      timestamp,
+      timestamp: submittedAt,
       boke: currentBoke,
       tsukkomi: value,
       mode,
       audioBlob,
       audioMime,
+      scoreCard,
     });
   };
 
@@ -626,6 +690,60 @@ function App() {
           </button>
         </div>
 
+        {lastSubmission?.scoreCard && (
+          <div className="scorecard">
+            <div className="scorecard-header">
+              <span className="scorecard-title">ツッコミ採点</span>
+              <span className={`scorecard-rank rank-${lastSubmission.scoreCard.rank}`}>
+                {lastSubmission.scoreCard.rank}
+              </span>
+              <span className="scorecard-total">
+                {lastSubmission.scoreCard.total}
+                <span className="scorecard-total-suffix">点</span>
+              </span>
+            </div>
+            <ul className="scorecard-axes">
+              <li>
+                <span className="axis-label">🚀 速さ</span>
+                <span className="axis-stars">
+                  {stars(lastSubmission.scoreCard.speed.score)}
+                </span>
+                <span className="axis-detail">
+                  {lastSubmission.scoreCard.speed.detail}
+                </span>
+              </li>
+              <li>
+                <span className="axis-label">💥 キレ</span>
+                <span className="axis-stars">
+                  {stars(lastSubmission.scoreCard.kire.score)}
+                </span>
+                <span className="axis-detail" />
+              </li>
+              <li>
+                <span className="axis-label">🎵 テンポ</span>
+                <span className="axis-stars">
+                  {stars(lastSubmission.scoreCard.tempo.score)}
+                </span>
+                <span className="axis-detail">
+                  {lastSubmission.scoreCard.tempo.detail}
+                </span>
+              </li>
+              <li>
+                <span className="axis-label">✨ 個性</span>
+                <span className="axis-stars">
+                  {stars(lastSubmission.scoreCard.originality.score)}
+                </span>
+                <span className="axis-detail">
+                  {lastSubmission.scoreCard.originality.detail}
+                </span>
+              </li>
+            </ul>
+            <p className="scorecard-comment">
+              {lastSubmission.scoreCard.comment}
+            </p>
+          </div>
+        )}
+
         {lastSubmission && (
           <div className="share-panel">
             <h3>このツッコミをシェア</h3>
@@ -757,7 +875,17 @@ function App() {
                       entry.boke.setup
                     )}
                   </div>
-                  <div className="history-tsukkomi">→ {entry.tsukkomi}</div>
+                  <div className="history-tsukkomi">
+                    {entry.scoreCard && (
+                      <span className={`history-rank rank-${entry.scoreCard.rank}`}>
+                        {entry.scoreCard.rank}
+                        <span className="history-rank-points">
+                          {entry.scoreCard.total}
+                        </span>
+                      </span>
+                    )}
+                    → {entry.tsukkomi}
+                  </div>
                   {entry.audioUrl && (
                     <div className="audio-row">
                       <audio
